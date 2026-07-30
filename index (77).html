@@ -1,0 +1,3228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physics Equations — Dictionary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&family=DM+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #C0392B;
+    --gold: #D4A017;
+    --cream: #FAF6EF;
+    --ink: #1A1209;
+    --ink2: #4A3F2F;
+    --ink3: #8A7A65;
+    --border: rgba(60,40,10,0.12);
+    --border-strong: rgba(60,40,10,0.25);
+    --surface: #FFFFFF;
+    --surface2: #F5EFE4;
+    --tag-bg: #FFF3D6;
+    --tag-text: #7A4F00;
+    --pill-active: #C0392B;
+    --pill-text: #fff;
+    --pill-inactive: transparent;
+    --pill-inactive-text: #4A3F2F;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ─── Header ─── */
+  header {
+    border-bottom: 1px solid var(--border-strong);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    background: var(--cream);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.35rem;
+    color: var(--red);
+    letter-spacing: -0.02em;
+  }
+  .logo span {
+    color: var(--ink3);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 400;
+    margin-left: 0.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  nav {
+    display: flex;
+    gap: 2px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 3px;
+  }
+  nav button {
+    background: none;
+    border: none;
+    padding: 6px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--pill-inactive-text);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  nav button.active {
+    background: var(--pill-active);
+    color: var(--pill-text);
+  }
+  nav button:hover:not(.active) {
+    background: rgba(60,40,10,0.07);
+  }
+
+  /* ─── Main layout ─── */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ─── Section headings ─── */
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--ink);
+    margin-bottom: 0.35rem;
+    letter-spacing: -0.02em;
+  }
+  .section-sub {
+    font-size: 0.9rem;
+    color: var(--ink3);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  /* ─── Dictionary ─── */
+  .search-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.25rem;
+    align-items: center;
+  }
+  .search-row input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    background: var(--surface);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-row input:focus { border-color: var(--red); }
+  .search-row select {
+    padding: 10px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    background: var(--surface);
+    color: var(--ink2);
+    outline: none;
+    cursor: pointer;
+  }
+
+  .dict-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 12px;
+  }
+  .dict-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    position: relative;
+  }
+  .dict-card:hover { border-color: var(--red); box-shadow: 0 2px 12px rgba(192,57,43,0.08); }
+  .dict-word {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.18rem;
+    color: var(--red);
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .dict-eq {
+    font-size: 1.05rem;
+    color: var(--ink);
+    margin: 4px 0 8px;
+    overflow-x: auto;
+  }
+  .dict-pos {
+    font-size: 0.72rem;
+    font-family: 'DM Mono', monospace;
+    color: var(--ink3);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .dict-def {
+    font-size: 0.88rem;
+    color: var(--ink2);
+    line-height: 1.55;
+  }
+  .dict-vars {
+    margin-top: 10px;
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+  }
+  .dict-vars .vrow {
+    display: flex;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: var(--ink2);
+    line-height: 1.6;
+    align-items: baseline;
+  }
+  .dict-vars .vsym {
+    min-width: 1.4em;
+    color: var(--red);
+    font-style: normal;
+  }
+  .dict-tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 100px;
+    margin-top: 8px;
+  }
+  .no-results {
+    grid-column: 1/-1;
+    text-align: center;
+    color: var(--ink3);
+    padding: 3rem;
+    font-size: 0.95rem;
+  }
+
+  /* ─── Derivations (grammar-style panels) ─── */
+  .grammar-toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 2rem;
+  }
+  .toc-btn {
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink2);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .toc-btn:hover, .toc-btn.active { background: var(--red); color: #fff; border-color: var(--red); }
+
+  .grammar-panel { display: none; }
+  .grammar-panel.active { display: block; }
+
+  .grammar-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .grammar-block h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.01em;
+  }
+  .grammar-block p, .grammar-block li {
+    font-size: 0.9rem;
+    color: var(--ink2);
+    line-height: 1.7;
+  }
+  .grammar-block ul { padding-left: 1.2rem; margin-top: 0.5rem; }
+  .grammar-block li { margin-bottom: 0.35rem; }
+  .grammar-block .highlight {
+    background: var(--tag-bg);
+    border-left: 3px solid var(--gold);
+    padding: 0.75rem 1rem;
+    border-radius: 0 8px 8px 0;
+    margin: 0.75rem 0;
+    font-size: 0.88rem;
+    color: var(--ink2);
+    line-height: 1.65;
+    overflow-x: auto;
+  }
+  .grammar-block .highlight strong { color: var(--red); font-weight: 500; }
+  code {
+    font-family: 'DM Mono', monospace;
+    background: var(--surface2);
+    color: var(--red);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+  .eq-line {
+    margin: 0.6rem 0;
+    padding: 0.7rem 0.9rem;
+    background: var(--cream);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--ink);
+    line-height: 1.6;
+    overflow-x: auto;
+  }
+  .eq-line .gloss { color: var(--ink3); font-size: 0.8rem; margin-top: 4px; font-family: 'DM Sans', sans-serif; }
+
+  /* ─── Flashcards ─── */
+  .flashcard-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .flashcard-wrap {
+    width: 100%;
+    max-width: 480px;
+    perspective: 1000px;
+  }
+  .flashcard {
+    width: 100%;
+    height: 240px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.45s cubic-bezier(.4,0,.2,1);
+    cursor: pointer;
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .fc-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .fc-front {
+    background: var(--surface);
+  }
+  .fc-back {
+    background: var(--red);
+    transform: rotateY(180deg);
+  }
+  .fc-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    color: var(--ink3);
+    margin-bottom: 0.75rem;
+  }
+  .fc-back .fc-label { color: rgba(255,255,255,0.65); }
+  .fc-word {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.7rem;
+    color: var(--red);
+    letter-spacing: -0.02em;
+  }
+  .fc-eq {
+    font-size: 1.3rem;
+    color: var(--ink);
+    margin-top: 0.5rem;
+  }
+  .fc-back .fc-word { color: #fff; font-size: 1.3rem; }
+  .fc-back .fc-eq { color: #fff; }
+  .fc-hint {
+    margin-top: 0.6rem;
+    font-size: 0.82rem;
+    color: var(--ink3);
+    line-height: 1.5;
+    max-width: 380px;
+  }
+  .fc-back .fc-hint { color: rgba(255,255,255,0.85); }
+
+  .fc-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .fc-btn {
+    padding: 10px 22px;
+    border-radius: 100px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--ink2);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .fc-btn:hover { border-color: var(--red); color: var(--red); }
+  .fc-btn.primary { background: var(--red); color: #fff; border-color: var(--red); }
+  .fc-btn.primary:hover { background: #a82d22; }
+  .fc-counter {
+    font-size: 0.82rem;
+    color: var(--ink3);
+    min-width: 80px;
+    text-align: center;
+  }
+  .fc-filter {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  .fc-filter button {
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: 100px;
+    padding: 5px 14px;
+    font-size: 0.8rem;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink2);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .fc-filter button.active { background: var(--red); color: #fff; border-color: var(--red); }
+
+  .katex { font-size: 1.05em; }
+  .dict-eq .katex, .fc-eq .katex { font-size: 1.15em; }
+
+  /* ─── Sim badge on dict cards ─── */
+  .dict-card.has-sim { cursor: pointer; }
+  .sim-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    background: var(--ink);
+    color: var(--gold);
+    font-size: 0.7rem;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    padding: 4px 10px 4px 8px;
+    border-radius: 100px;
+    letter-spacing: 0.04em;
+    border: 1px solid rgba(212,160,23,0.3);
+    transition: background 0.15s, color 0.15s;
+  }
+  .dict-card.has-sim:hover .sim-badge { background: var(--red); color: #fff; border-color: transparent; }
+  .sim-badge svg { width: 9px; height: 9px; flex-shrink: 0; }
+
+  /* ─── Simulation section ─── */
+  .sim-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: 1px solid var(--border-strong);
+    border-radius: 100px;
+    padding: 6px 14px 6px 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.84rem;
+    color: var(--ink2);
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .sim-back:hover { border-color: var(--red); color: var(--red); }
+  .sim-back svg { width: 14px; height: 14px; }
+
+  .sim-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 720px) { .sim-layout { grid-template-columns: 1fr; } }
+
+  .sim-canvas-wrap {
+    background: #0D0F14;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+    aspect-ratio: 1;
+  }
+  .sim-canvas-wrap canvas { display: block; width: 100%; height: 100%; }
+
+  .sim-panel { display: flex; flex-direction: column; gap: 14px; }
+
+  .sim-equation {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+  }
+  .sim-equation .eq-label {
+    font-size: 0.7rem;
+    font-family: 'DM Mono', monospace;
+    color: var(--ink3);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .sim-equation .eq-display { font-size: 1.05rem; color: var(--ink); overflow-x: auto; }
+
+  .sim-controls {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .sim-controls h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    color: var(--ink);
+  }
+  .sim-slider-group { display: flex; flex-direction: column; gap: 3px; }
+  .sim-slider-group .sl-header { display: flex; justify-content: space-between; align-items: baseline; }
+  .sim-slider-group .sl-name { font-size: 0.8rem; color: var(--ink2); }
+  .sim-slider-group .sl-sym { color: var(--red); }
+  .sim-slider-group .sl-val { font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--ink); font-weight: 500; }
+  .sim-slider-group input[type=range] { width: 100%; accent-color: var(--red); margin-top: 4px; }
+
+  .sim-readout {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .sim-readout h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .readout-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .readout-row:last-child { border-bottom: none; }
+  .readout-row .rkey { font-size: 0.78rem; color: var(--ink3); }
+  .readout-row .rval { font-family: 'DM Mono', monospace; font-size: 0.82rem; color: var(--ink); font-weight: 500; }
+  .readout-row .rval.hi { color: var(--red); }
+
+  .sim-legend {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.85rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .sim-legend h3 { font-family: 'DM Serif Display', serif; font-size: 0.95rem; color: var(--ink); margin-bottom: 2px; }
+  .legend-row { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: var(--ink2); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .legend-line { width: 18px; height: 0; border-top: 2px solid; flex-shrink: 0; }
+
+  @media (max-width: 600px) {
+    header { padding: 0 1rem; }
+    nav button { padding: 6px 10px; font-size: 0.75rem; }
+    .dict-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Tayonica <span>reference dictionary of Equations</span></div>
+  <nav>
+    <button class="active" onclick="showSection('dictionary', this)">Equations</button>
+    <button onclick="showSection('derivations', this)">Derivations</button>
+    <button onclick="showSection('flashcards', this)">Flashcards</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ═══════════════════════════════════ DICTIONARY ═══ -->
+<section class="section active" id="dictionary">
+  <h1 class="section-title">Equations</h1>
+  <p class="section-sub">Core equations of physics subjects, with the meaning of every variable spelled out.</p>
+  <div class="search-row">
+    <input id="dict-search" type="text" placeholder="Search by name, symbol, or topic…" oninput="filterDict()">
+    <select id="dict-pos" onchange="filterDict()">
+      <option value="">All topics</option>
+      <option value="kinematics">Kinematics</option>
+      <option value="dynamics">Dynamics & forces</option>
+      <option value="work-energy">Work & energy</option>
+      <option value="momentum">Momentum & impulse</option>
+      <option value="rotation">Rotation</option>
+      <option value="gravitation">Gravitation</option>
+      <option value="oscillation">Oscillation & waves</option>
+      <option value="light">Light & radiation</option>
+      <option value="thermo">Thermodynamics</option>
+      <option value="em">Electromagnetism</option>
+    </select>
+  </div>
+  <div class="dict-grid" id="dict-grid"></div>
+</section>
+
+<!-- ═══════════════════════════════════ SIMULATION ═══ -->
+<section class="section" id="simulation">
+  <button class="sim-back" onclick="closeSimulation()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
+    Back to Dictionary
+  </button>
+  <div id="sim-host"></div>
+</section>
+
+<!-- ═══════════════════════════════════ DERIVATIONS ═══ -->
+<section class="section" id="derivations">
+  <h1 class="section-title">Derivations</h1>
+  <p class="section-sub">Where the equations come from, worked from first principles rather than just stated.</p>
+
+  <div class="grammar-toc">
+    <button class="toc-btn active" onclick="showGrammar('kinematics', this)">Kinematics</button>
+    <button class="toc-btn" onclick="showGrammar('energy', this)">Work–energy theorem</button>
+    <button class="toc-btn" onclick="showGrammar('momentum', this)">Momentum & impulse</button>
+    <button class="toc-btn" onclick="showGrammar('rotation', this)">Rotational analogy</button>
+    <button class="toc-btn" onclick="showGrammar('shm', this)">Simple harmonic motion</button>
+  </div>
+
+  <!-- Kinematics -->
+  <div class="grammar-panel active" id="g-kinematics">
+    <div class="grammar-block">
+      <h3>From the definition of acceleration</h3>
+      <p>Start from the definition of (constant) acceleration as the rate of change of velocity, and integrate up.</p>
+      <div class="eq-line">$$a = \dfrac{dv}{dt} \;\;\Rightarrow\;\; \int_{v_0}^{v} dv' = \int_0^t a\,dt' \;\;\Rightarrow\;\; v = v_0 + at$$</div>
+      <p>Integrate velocity once more to get position, since <code>v = dx/dt</code>:</p>
+      <div class="eq-line">$$x = x_0 + \int_0^t v(t')\,dt' = x_0 + v_0 t + \tfrac{1}{2}at^2$$</div>
+      <div class="highlight"><strong>Eliminating time</strong> — solve the velocity equation for <code>t = (v-v₀)/a</code> and substitute into the position equation; after simplifying, the time-independent relation falls out:</div>
+      <div class="eq-line">$$v^2 = v_0^2 + 2a(x-x_0)$$</div>
+      <p>This last form is useful whenever a problem never asks "how long," only "how far" or "how fast."</p>
+    </div>
+  </div>
+
+  <!-- Work-energy theorem -->
+  <div class="grammar-panel" id="g-energy">
+    <div class="grammar-block">
+      <h3>Work–energy theorem</h3>
+      <p>Work done by the net force along a path is defined as the line integral of force over displacement. Substitute Newton's second law and use the chain rule to trade <code>dt</code> for <code>dv</code>:</p>
+      <div class="eq-line">$$W = \int F\,dx = \int m\dfrac{dv}{dt}\,dx = \int m\,\dfrac{dx}{dt}\,dv = \int_{v_0}^{v} mv'\,dv' = \tfrac{1}{2}mv^2 - \tfrac{1}{2}mv_0^2$$</div>
+      <p>So net work equals the change in kinetic energy — this is exact for any force, constant or not, as long as it's the <em>net</em> force.</p>
+    </div>
+    <div class="grammar-block">
+      <h3>Gravitational PE from work against gravity</h3>
+      <p>Near Earth's surface, the work needed to lift a mass a height <code>h</code> against the (locally constant) gravitational force is stored as potential energy:</p>
+      <div class="eq-line">$$U = -\int_0^h (-mg)\,dy = mgh$$</div>
+      <div class="highlight">This is a <strong>local approximation</strong>. The exact gravitational potential energy, valid at any distance, is <code>U = -GMm/r</code>; expanding it for small height changes near a planet's surface recovers <code>mgh</code> up to an additive constant.</div>
+    </div>
+    <div class="grammar-block">
+      <h3>Spring potential energy</h3>
+      <p>For a Hookean spring, <code>F = -kx</code>. Work done <em>against</em> the spring while stretching it from 0 to <code>x</code>:</p>
+      <div class="eq-line">$$U = \int_0^x kx'\,dx' = \tfrac{1}{2}kx^2$$</div>
+    </div>
+  </div>
+
+  <!-- Momentum -->
+  <div class="grammar-panel" id="g-momentum">
+    <div class="grammar-block">
+      <h3>Impulse–momentum theorem</h3>
+      <p>Starting again from Newton's second law in its more fundamental momentum form and integrating over time directly (no chain-rule trick needed this time, since force is already a function of <code>t</code>):</p>
+      <div class="eq-line">$$F = \dfrac{dp}{dt} \;\;\Rightarrow\;\; \int_{t_1}^{t_2} F\,dt = \int_{p_1}^{p_2} dp \;\;\Rightarrow\;\; J = \Delta p$$</div>
+      <p>This is why impulse — the time-integral of force — is the natural quantity for collisions: forces during impact are large but brief and often poorly known, while the net momentum change is measurable.</p>
+    </div>
+    <div class="grammar-block">
+      <h3>Conservation of momentum</h3>
+      <p>For an isolated system of two bodies, Newton's third law gives <code>F₁₂ = -F₂₁</code> at every instant. Integrating both sides over the same time interval:</p>
+      <div class="eq-line">$$\Delta p_1 = -\Delta p_2 \;\;\Rightarrow\;\; \Delta(p_1+p_2)=0 \;\;\Rightarrow\;\; p_{1,i}+p_{2,i} = p_{1,f}+p_{2,f}$$</div>
+      <p>Total momentum is conserved precisely because internal forces cancel in pairs — this generalizes to any number of bodies with only internal forces acting.</p>
+    </div>
+  </div>
+
+  <!-- Rotational analogy -->
+  <div class="grammar-panel" id="g-rotation">
+    <div class="grammar-block">
+      <h3>The linear → rotational dictionary</h3>
+      <p>Every rotational equation below is the linear equation with <code>x → θ</code>, <code>v → ω</code>, <code>a → α</code>, <code>m → I</code>, <code>F → τ</code>, <code>p → L</code>. This works because each rotational quantity is defined by the same calculus operation as its linear counterpart, just performed on angle instead of position.</p>
+      <div class="highlight">
+        <strong>Why mass becomes moment of inertia:</strong> for a rigid body, kinetic energy is the sum over all mass elements of their individual linear KE, but each element's speed is <code>v = ωr</code>:
+      </div>
+      <div class="eq-line">$$KE_{rot} = \sum_i \tfrac{1}{2}m_i v_i^2 = \sum_i \tfrac{1}{2}m_i (\omega r_i)^2 = \tfrac{1}{2}\omega^2 \sum_i m_i r_i^2 = \tfrac{1}{2}I\omega^2$$</div>
+      <p>The factor <code>Σmᵢrᵢ²</code> is defined as the moment of inertia <code>I</code> — it plays exactly the role mass plays in linear KE, which is why the whole linear toolkit carries over term-for-term.</p>
+    </div>
+  </div>
+
+  <!-- SHM -->
+  <div class="grammar-panel" id="g-shm">
+    <div class="grammar-block">
+      <h3>Simple harmonic motion from Hooke's law</h3>
+      <p>Newton's second law for a mass on an ideal spring, with no other forces:</p>
+      <div class="eq-line">$$m\ddot{x} = -kx \;\;\Rightarrow\;\; \ddot{x} + \dfrac{k}{m}x = 0$$</div>
+      <p>This is the classic linear, constant-coefficient second-order ODE. Guessing a solution of the form <code>x = A cos(ωt + φ)</code> and substituting back:</p>
+      <div class="eq-line">$$-A\omega^2\cos(\omega t+\varphi) + \dfrac{k}{m}A\cos(\omega t+\varphi) = 0 \;\;\Rightarrow\;\; \omega^2 = \dfrac{k}{m} \;\;\Rightarrow\;\; \omega = \sqrt{\dfrac{k}{m}}$$</div>
+      <p>The amplitude <code>A</code> and phase <code>φ</code> are set by initial conditions; the angular frequency is fixed entirely by the physics of the system, which is the defining feature of SHM.</p>
+      <div class="highlight">The same equation form — restoring "force" proportional to negative displacement — is why the small-angle pendulum (<code>θ̈ + (g/L)θ = 0</code>) and LC circuits obey the same mathematics with different symbols.</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════════════════ FLASHCARDS ═══ -->
+<section class="section" id="flashcards">
+  <h1 class="section-title">Flashcards</h1>
+  <p class="section-sub">Equation on the front, name and variables on the back. Click the card to flip it.</p>
+
+  <div class="flashcard-area">
+    <div class="fc-filter" id="fc-filter">
+      <button class="active" onclick="setFcFilter('', this)">All</button>
+      <button onclick="setFcFilter('kinematics', this)">Kinematics</button>
+      <button onclick="setFcFilter('dynamics', this)">Dynamics</button>
+      <button onclick="setFcFilter('work-energy', this)">Work & energy</button>
+      <button onclick="setFcFilter('momentum', this)">Momentum</button>
+      <button onclick="setFcFilter('rotation', this)">Rotation</button>
+      <button onclick="setFcFilter('gravitation', this)">Gravitation</button>
+      <button onclick="setFcFilter('oscillation', this)">Oscillation</button>
+      <button onclick="setFcFilter('thermo', this)">Thermo</button>
+      <button onclick="setFcFilter('em', this)">EM</button>
+    </div>
+
+    <div class="flashcard-wrap">
+      <div class="flashcard" id="flashcard" onclick="flipCard()">
+        <div class="fc-face fc-front">
+          <div class="fc-label">Equation</div>
+          <div class="fc-eq" id="fc-eq"></div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-label">Name & variables</div>
+          <div class="fc-word" id="fc-word"></div>
+          <div class="fc-hint" id="fc-hint"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-controls">
+      <button class="fc-btn" onclick="prevCard()">← Prev</button>
+      <button class="fc-btn primary" onclick="flipCard()">Flip</button>
+      <button class="fc-btn" onclick="nextCard()">Next →</button>
+      <span class="fc-counter" id="fc-counter"></span>
+      <button class="fc-btn" onclick="shuffleCards()">Shuffle</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+const POS_LABELS = {
+  kinematics: 'Kinematics',
+  dynamics: 'Dynamics & forces',
+  'work-energy': 'Work & energy',
+  momentum: 'Momentum & impulse',
+  rotation: 'Rotation',
+  gravitation: 'Gravitation',
+  oscillation: 'Oscillation & waves',
+  thermo: 'Thermodynamics',
+  em: 'Electromagnetism',
+};
+
+// ─── DATA ────────────────────────────────────────────────────────────────────
+// w: name, eq: LaTeX (no $$), pos: topic, def: short description,
+// vars: [{sym, name}], tag: optional label
+const DICT = [
+  // ── Kinematics ──
+  { id:'kin-v', w:'Velocity (constant accel.)', eq:'v = v_0 + at', pos:'kinematics',
+    def:'Velocity after time t under constant acceleration.',
+    vars:[ {sym:'v', name:'final velocity'}, {sym:'v_0', name:'initial velocity'}, {sym:'a', name:'acceleration (constant)'}, {sym:'t', name:'elapsed time'} ],
+    tag:'1D kinematics' },
+  { id:'kin-x', w:'Position (constant accel.)', eq:'x = x_0 + v_0 t + \\tfrac{1}{2}at^2', pos:'kinematics',
+    def:'Position after time t under constant acceleration.',
+    vars:[ {sym:'x', name:'final position'}, {sym:'x_0', name:'initial position'}, {sym:'v_0', name:'initial velocity'}, {sym:'a', name:'acceleration'}, {sym:'t', name:'elapsed time'} ],
+    tag:'1D kinematics' },
+  { id:'kin-v2', w:'Time-independent kinematic eq.', eq:'v^2 = v_0^2 + 2a(x-x_0)', pos:'kinematics',
+    def:'Relates velocity and displacement directly, with time eliminated.',
+    vars:[ {sym:'v', name:'final velocity'}, {sym:'v_0', name:'initial velocity'}, {sym:'a', name:'acceleration'}, {sym:'x-x_0', name:'displacement'} ] },
+  { id:'kin-avgv', w:'Average velocity', eq:'\\bar{v} = \\dfrac{x_2-x_1}{t_2-t_1}', pos:'kinematics',
+    def:'Net displacement divided by elapsed time.',
+    vars:[ {sym:'\\bar v', name:'average velocity'}, {sym:'x_2-x_1', name:'displacement'}, {sym:'t_2-t_1', name:'time interval'} ] },
+  { id:'kin-centrip', w:'Centripetal acceleration', eq:'a_c = \\dfrac{v^2}{r} = \\omega^2 r', pos:'kinematics',
+    def:'Acceleration directed toward the center of a circular path.',
+    vars:[ {sym:'a_c', name:'centripetal acceleration'}, {sym:'v', name:'tangential speed'}, {sym:'r', name:'radius of the circular path'}, {sym:'\\omega', name:'angular velocity'} ] },
+  { id:'kin-range', w:'Projectile range', eq:'R = \\dfrac{v_0^2 \\sin(2\\theta)}{g}', pos:'kinematics',
+    def:'Horizontal range of a projectile launched.',
+    vars:[ {sym:'R', name:'horizontal range'}, {sym:'v_0', name:'launch speed'}, {sym:'\\theta', name:'launch angle above horizontal'}, {sym:'g', name:'gravitational acceleration'} ] },
+  { id:'kin-height', w:'Projectile height', eq:'h = \\dfrac{v_0^2 \\sin^2(2\\theta)}{2g}', pos:'kinematics',
+    def:'Vertical range of a projectile launched.',
+    vars:[ {sym:'h', name:'vertical range / height'}, {sym:'v_0', name:'launch speed'}, {sym:'\\theta', name:'launch angle above horizontal'}, {sym:'g', name:'gravitational acceleration'} ] },
+
+  // ── Dynamics ──
+  { id:'dyn-f2', w:"Newton's second law", eq:'\\vec{F} = m\\vec{a}', pos:'dynamics',
+    def:'Net force equals mass times acceleration.',
+    vars:[ {sym:'F', name:'net force'}, {sym:'m', name:'mass'}, {sym:'a', name:'acceleration'} ] },
+  { id:'dyn-f3', w:"Newton's second law (multiple forces)", eq:'Σ\\vec{F} = \\vec{F_1} + \\vec{F_2} + ... + \\vec{F_n} = m\\vec{a}', pos:'dynamics',
+    def:'Forces add together to produce an acceleration, a. When the forces balance, the acceleration, a = 0 m/s^2.',
+    vars:[ {sym:'F', name:'net force'}, {sym:'m', name:'mass'}, {sym:'a', name:'acceleration'} ] },
+  { id:'dyn-grav', w:"Newton's law of gravitation", eq:'F = \\dfrac{Gm_1m_2}{r^2}', pos:'dynamics',
+    def:'Attractive force between two point masses.',
+    vars:[ {sym:'F', name:'gravitational force'}, {sym:'G', name:'gravitational constant'}, {sym:'m_1,\\,m_2', name:'the two masses'}, {sym:'r', name:'distance between their centers'} ],
+    tag:'also under Gravitation' },
+  { id:'dyn-weight', w:'Weight', eq:'F_g = mg', pos:'dynamics',
+    def:"Force of gravity on a mass near a planet's surface.",
+    vars:[ {sym:'W', name:'weight'}, {sym:'m', name:'mass'}, {sym:'g', name:'local gravitational acceleration'} ] },
+  { id:'dyn-friction', w:'Friction force', eq:'f \\le \\mu N', pos:'dynamics',
+    def:'Maximum frictional force is proportional to the normal force.',
+    vars:[ {sym:'f', name:'friction force'}, {sym:'\\mu', name:'coefficient of friction (static or kinetic)'}, {sym:'N', name:'normal force'} ] },
+  { id:'dyn-hooke', w:"Hooke's law", eq:'F = -kx', pos:'dynamics',
+    def:'Restoring force of an ideal spring, proportional to displacement.',
+    vars:[ {sym:'F', name:'restoring force'}, {sym:'k', name:'spring constant'}, {sym:'x', name:'displacement from equilibrium'} ] },
+  { id:'dyn-drag', w:'Drag force (quadratic)', eq:'F_d = \\tfrac{1}{2}\\rho v^2 C_d A', pos:'dynamics',
+    def:'Fluid drag at high Reynolds number (turbulent regime).',
+    vars:[ {sym:'F_d', name:'drag force'}, {sym:'\\rho', name:'fluid density'}, {sym:'v', name:'relative speed'}, {sym:'C_d', name:'drag coefficient'}, {sym:'A', name:'cross-sectional area'} ] },
+  { id:'dyn-buo', w:'Buoyancy Force', eq:'F_β = \\rho gV = m_fg', pos:'dynamics',
+    def:'How a mass floats in a fluid.',
+    vars:[ {sym:'F_β', name:'buoyancy force'}, {sym:'\\rho', name:'fluid density'}, {sym:'g', name:'gravitational acceleration'}, {sym:'V', name:'displaced volume of fluid by floater'}, {sym:'m_f', name:'mass of displaced fluid'} ] },
+  { id:'bulk', w:'Bulk modulus', eq:'β = \\dfrac{-V_0ΔP_{fluid}}{ΔV}', pos:'dynamics',
+    def:'how much a solid or liquid resists compression when squeezed from all sides.',
+    vars:[ {sym:'β', name:'bulk modulus'}, {sym:'V_0', name:'initial volume of substance'}, {sym:'ΔP', name:'change in pressure'}, {sym:'V', name:'volume of substance'} ] },
+  { id:'bulk', w:'Bulk modulus', eq:'β = \\dfrac{-V_0ΔP_{fluid}}{ΔV}', pos:'dynamics',
+    def:'how much a solid or liquid resists compression when squeezed from all sides.',
+    vars:[ {sym:'β', name:'bulk modulus'}, {sym:'V_0', name:'initial volume of substance'}, {sym:'ΔP', name:'change in pressure'}, {sym:'V', name:'volume of substance'} ] }, 
+         
+
+  // ── Work & energy ──
+  { id:'we-work', w:'Work (constant force)', eq:'W = F d \\cos\\theta', pos:'work-energy',
+    def:'Work done by a constant force over a displacement.',
+    vars:[ {sym:'W', name:'work done'}, {sym:'F', name:'magnitude of the force'}, {sym:'d', name:'magnitude of displacement'}, {sym:'\\theta', name:'angle between force and displacement'} ] },
+  { id:'we-workdef', w:'Definition of work', eq:'W = \\int_{x_0}^{x} F_x\\, dx', pos:'work-energy',
+    def:'Force component in the direction of movement integrated by displacement.',
+    vars:[ {sym:'W', name:'work'}, {sym:'F_x', name:'force in the direction of displacement'},  {sym:'x', name:'displacement'} ] },
+  { id:'we-ke', w:'Kinetic energy', eq:'K = \\tfrac{1}{2}mv^2', pos:'work-energy',
+    def:'Energy of motion of a mass m moving at speed v.',
+    vars:[ {sym:'K', name:'kinetic energy'}, {sym:'m', name:'mass'}, {sym:'v', name:'speed'} ] },
+  { id:'we-wnet', w:'Work–energy theorem', eq:'W_{net} = \\Delta KE = \\tfrac{1}{2}mv_f^2 - \\tfrac{1}{2}mv_i^2', pos:'work-energy',
+    def:'Net work done on an object equals its change in kinetic energy.',
+    vars:[ {sym:'W_{net}', name:'net work done on the object'}, {sym:'m', name:'mass'}, {sym:'v_f,\\,v_i', name:'final and initial speeds'} ] },
+  { id:'we-ugrav', w:'Gravitational PE (uniform field)', eq:'U = mgh', pos:'work-energy',
+    def:"Potential energy near a planet's surface, where g is roughly constant.",
+    vars:[ {sym:'U', name:'gravitational potential energy'}, {sym:'m', name:'mass'}, {sym:'g', name:'local gravitational acceleration'}, {sym:'h', name:'height above the reference level'} ] },
+  { id:'we-ugen', w:'Gravitational PE (general)', eq:'U = -\\dfrac{GMm}{r}', pos:'work-energy',
+    def:'Exact gravitational potential energy at any separation, with U → 0 at infinity.',
+    vars:[ {sym:'U', name:'gravitational potential energy'}, {sym:'G', name:'gravitational constant'}, {sym:'M,\\,m', name:'the two masses'}, {sym:'r', name:'separation between centers'} ],
+    tag:'also under Gravitation' },
+  { id:'we-uspring', w:'Elastic PE (spring)', eq:'U_s = \\tfrac{1}{2}kx^2', pos:'work-energy',
+    def:'Energy stored in an ideal spring stretched or compressed by x.',
+    vars:[ {sym:'U_s', name:'elastic potential energy'}, {sym:'k', name:'spring constant'}, {sym:'x', name:'displacement from natural length'} ] },
+  { id:'we-cons1', w:'Conservation of energy (conservative forces)', eq:'K_i + U_i = K_f + U_f', pos:'work-energy',
+    def:'Total mechanical energy is constant when only conservative forces act.',
+    vars:[ {sym:'K_i,\\,K_f', name:'initial and final kinetic energy'}, {sym:'U_i,\\,U_f', name:'initial and final potential energy'} ] },
+  { id:'we-cons2', w:'Conservation of energy', eq:'K_i + U_i + W = K_f + U_f', pos:'work-energy',
+    def:'Total mechanical energy is constant when only conservative forces act.',
+    vars:[ {sym:'K_i,\\,K_f', name:'initial and final kinetic energy'}, {sym:'U_i,\\,U_f', name:'initial and final potential energy'}, {sym:'W', name:'nonconservative work'} ] },
+  { id:'we-power', w:'Power', eq:'POW = \\dfrac{dW}{dt} = Fv', pos:'work-energy',
+    def:'Rate at which work is done; equals force times velocity for a constant force along the motion.',
+    vars:[ {sym:'POW', name:'power'}, {sym:'W', name:'work'}, {sym:'t', name:'time'}, {sym:'F', name:'force'}, {sym:'v', name:'velocity'} ] },
+
+  // ── Momentum ──
+  { id:'mom-p', w:'Momentum', eq:'\\vec{p} = m\\vec{v}', pos:'momentum',
+    def:'Momentum of a mass m moving at velocity v.',
+    vars:[ {sym:'\\vec{p}', name:'momentum'}, {sym:'m', name:'mass'}, {sym:'\\vec{v}', name:'velocity'} ] },
+  { id:'mom-cons', w:'Conservation of momentum', eq:'\\sum \\vec{p_i} = \\sum \\vec{p_f}', pos:'momentum',
+    def:'Total momentum of an isolated system is unchanged by internal forces.',
+    vars:[ {sym:'p_i', name:'momenta of all bodies before interaction'}, {sym:'p_f', name:'momenta of all bodies after interaction'} ] },
+  { id:'mom-impulse', w:'Momentum relation to force', eq:'F = \\dfrac{dp}{dt}', pos:'momentum',
+    def:'Changing momentum with time produces a force.',
+    vars:[ {sym:'F', name:'force'}, {sym:'p', name:'momentum'}, {sym:'t', name:'time'} ] },
+  { id:'mom-impulse', w:'Impulse–momentum theorem', eq:'J = \\int F\\,dt = \\Delta p', pos:'momentum',
+    def:'Impulse delivered by a force equals the resulting change in momentum.',
+    vars:[ {sym:'J', name:'impulse'}, {sym:'F', name:'applied force (function of time)'}, {sym:'\\Delta p', name:'change in momentum'} ] },
+  { id:'mom-elastic', w:'Elastic collision velocities', eq:"v_{10} + v_{1f} = v_{20} + v_{2f}", pos:'momentum',
+    def:'Velocity relationship of two masses in an elastic collision.',
+    vars:[ {sym:'v_{1f},\\,v_{2f}', name:'final velocities of the two masses'}, {sym:'v_{10},\\,v_{20}', name:'initial velocities of the two masses'} ] },
+  { id:'mom-com', w:'Center of mass', eq:'\\vec{R}_{cm} = \\dfrac{\\sum m_i \\vec{r}_i}{\\sum m_i}', pos:'momentum',
+    def:'Mass-weighted average position of a system of particles.',
+    vars:[ {sym:'\\vec R_{cm}', name:'center-of-mass position'}, {sym:'m_i', name:'mass of particle i'}, {sym:'\\vec r_i', name:'position of particle i'} ] },
+  { id:'mom-ke', w:'Kinetic energy momentum relationship', eq:'K = \\dfrac{p^2}{2m} = \\dfrac{1}{2}mv^2 ', pos:'momentum',
+    def:'Kinetic energy in terms of momentum.',
+    vars:[ {sym:'K', name:'kinetic energy'}, {sym:'p', name:'momentum'}, {sym:'v', name:'velocity'}, {sym:'m', name:'mass'}  ] },
+
+  // ── Rotation ──
+  { id:'rot-v', w:'Angular velocity & speed', eq:'v = \\omega r', pos:'rotation',
+    def:'Tangential speed of a point at radius r from the rotation axis.',
+    vars:[ {sym:'v', name:'tangential speed'}, {sym:'\\omega', name:'angular velocity'}, {sym:'r', name:'radius from the axis'} ] },
+  { id:'rot-v', w:'Angular radial acceleration', eq:'a_r = \\omega^2 r', pos:'rotation',
+    def:'Radial acceleration of a point at radius r from the rotation axis.',
+    vars:[ {sym:'a_T', name:'radial acceleration'}, {sym:'\\omega', name:'angular velocity'}, {sym:'r', name:'radius from the axis'} ] },
+  { id:'rot-v', w:'Angular tangential acceleration', eq:'a_T = \\alpha r', pos:'rotation',
+    def:'Tangential acceleration of a point at radius r from the rotation axis.',
+    vars:[ {sym:'a_T', name:'tangential acceleration'}, {sym:'\\alpha = d\\omega/dt', name:'Change in angular speed'}, {sym:'r', name:'radius from the axis'} ] },
+  { id:'rot-torque', w:'Torque', eq:'\\tau = rF\\sin\\theta = I\\alpha', pos:'rotation',
+    def:'Rotational analog of force; also equals moment of inertia times angular acceleration.',
+    vars:[ {sym:'\\tau', name:'torque'}, {sym:'r', name:'distance from pivot to point of application'}, {sym:'F', name:'applied force'}, {sym:'\\theta', name:'angle between force and lever arm'}, {sym:'I', name:'moment of inertia'}, {sym:'\\alpha', name:'angular acceleration'} ] },
+  { id:'rot-I', w:'Moment of inertia (point mass)', eq:'I = mr^2', pos:'rotation',
+    def:"Rotational analog of mass, for a point mass at radius r from the axis.",
+    vars:[ {sym:'I', name:'moment of inertia'}, {sym:'m', name:'mass'}, {sym:'r', name:'distance from the rotation axis'} ] },
+  { id:'rot-ke', w:'Rotational kinetic energy', eq:'KE_{rot} = \\tfrac{1}{2}I\\omega^2', pos:'rotation',
+    def:'Kinetic energy of a rotating rigid body.',
+    vars:[ {sym:'KE_{rot}', name:'rotational kinetic energy'}, {sym:'I', name:'moment of inertia'}, {sym:'\\omega', name:'angular velocity'} ] },
+  { id:'rot-L', w:'Angular momentum', eq:'L = I\\omega = rp\\sin\\theta', pos:'rotation',
+    def:'Rotational analog of linear momentum.',
+    vars:[ {sym:'L', name:'angular momentum'}, {sym:'I', name:'moment of inertia'}, {sym:'\\omega', name:'angular velocity'}, {sym:'r', name:'position vector magnitude from the reference point'}, {sym:'p', name:'linear momentum'}, {sym:'\\theta', name:'angle between r and p'} ] },
+  { id:'rot-Lcons', w:'Conservation of angular momentum', eq:'L_i = L_f \\;\\; (\\tau_{net}=0)', pos:'rotation',
+    def:'Angular momentum is conserved when net external torque is zero.',
+    vars:[ {sym:'L_i,\\,L_f', name:'initial and final angular momentum'}, {sym:'\\tau_{net}', name:'net external torque'} ] },
+    
+
+  // ── Gravitation ──
+  { id:'grav-kepler3', w:"Kepler's third law", eq:'T^2 = \\dfrac{4\\pi^2}{GM}a^3', pos:'gravitation',
+    def:'Relates orbital period to semi-major axis for a body orbiting mass M.',
+    vars:[ {sym:'T', name:'orbital period'}, {sym:'G', name:'gravitational constant'}, {sym:'M', name:'mass of the central body'}, {sym:'a', name:'semi-major axis of the orbit'} ] },
+  { id:'grav-vorb', w:'Orbital (circular) speed', eq:'v = \\sqrt{\\dfrac{GM}{r}}', pos:'gravitation',
+    def:'Speed needed to maintain a circular orbit at radius r.',
+    vars:[ {sym:'v', name:'orbital speed'}, {sym:'G', name:'gravitational constant'}, {sym:'M', name:'mass of the central body'}, {sym:'r', name:'orbital radius'} ] },
+  { id:'grav-vesc', w:'Escape velocity', eq:'v_{esc} = \\sqrt{\\dfrac{2GM}{r}}', pos:'gravitation',
+    def:'Minimum speed to escape a gravitational field from radius r, ignoring drag.',
+    vars:[ {sym:'v_{esc}', name:'escape velocity'}, {sym:'G', name:'gravitational constant'}, {sym:'M', name:'mass of the central body'}, {sym:'r', name:'starting distance from the center'} ] },
+  { id:'grav-g', w:'Gravitational field strength', eq:'g = \\dfrac{GM}{r^2}', pos:'gravitation',
+    def:'Gravitational acceleration produced by mass M at distance r.',
+    vars:[ {sym:'g', name:'gravitational field strength / acceleration'}, {sym:'G', name:'gravitational constant'}, {sym:'M', name:'source mass'}, {sym:'r', name:'distance from the center of M'} ] },
+  { id:'grav-hill', w:'Hill sphere radius', eq:'r_H \\approx a\\left(\\dfrac{m}{3M}\\right)^{1/3}', pos:'gravitation',
+    def:"Approximate radius within which a smaller body's gravity dominates over the primary's tidal pull.",
+    vars:[ {sym:'r_H', name:'Hill sphere radius'}, {sym:'a', name:"semi-major axis of the smaller body's orbit"}, {sym:'m', name:'mass of the smaller (orbiting) body'}, {sym:'M', name:'mass of the larger (central) body'} ] },
+  { id:'bin-orb', w:'Kelper\'s third law for binary orbits', eq:'T^2 = \\dfrac{4\\pi^2}{G(M + m)}D^3', pos:'gravitation',
+    def:"The orital motion of two celestial bodies orbiting around each other",
+    vars:[ {sym:'T', name:'orbital period'}, {sym:'G', name:'gravitational constant'}, {sym:'M', name:'mass of larger body'}, {sym:'m', name:'mass of smaller body'}, {sym:'D', name:'sum of semimajor axis of the two bodies\' orbits (distance between bodies for circular orbits)'} ] }, 
+     
+
+  // ── Oscillation & waves ──
+  { id:'osc-omega', w:'SHM angular frequency (spring)', eq:'\\omega = \\sqrt{\\dfrac{k}{m}}', pos:'oscillation',
+    def:'Angular frequency of a mass-spring oscillator.',
+    vars:[ {sym:'\\omega', name:'angular frequency'}, {sym:'k', name:'spring constant'}, {sym:'m', name:'oscillating mass'} ] },
+  { id:'osc-x', w:'SHM position', eq:'x(t) = A\\cos(\\omega t + \\varphi)', pos:'oscillation',
+    def:'General solution for simple harmonic motion.',
+    vars:[ {sym:'x(t)', name:'position at time t'}, {sym:'A', name:'amplitude'}, {sym:'\\omega', name:'angular frequency'}, {sym:'\\varphi', name:'phase constant, set by initial conditions'} ] },
+  { id:'osc-pend', w:'Simple pendulum period', eq:'T = 2\\pi\\sqrt{\\dfrac{L}{g}}', pos:'oscillation',
+    def:'Period of a simple pendulum for small oscillation angles.',
+    vars:[ {sym:'T', name:'period'}, {sym:'L', name:'pendulum length'}, {sym:'g', name:'gravitational acceleration'} ] },
+  { id:'osc-wave', w:'Wave speed', eq:'v = f\\lambda = ω/k', pos:'oscillation',
+    def:'Relates a wave\u2019s speed, frequency, and wavelength.',
+    vars:[ {sym:'v', name:'wave speed'}, {sym:'f', name:'frequency'}, {sym:'\\lambda', name:'wavelength'}, {sym:'ω', name:'angular frequency'}, {sym:'k', name:'wave number'} ] },
+  { id:'waves-wavenumber', w:'Wave number', eq:'k = \\frac{2\\pi}{\\lambda} =2\\pi T', pos:'oscillation',
+    def:'Wave number relates to wavelength; angular frequency relates to period by the analogous expression.',
+    vars:[ {sym:'k', name:'wave number'}, {sym:'\\lambda', name:'wavelength'}, {sym:'T', name:'period'} ] },  
+  { id:'osc-eshm', w:'Energy of SHM', eq:'E = \\tfrac{1}{2}kA^2', pos:'oscillation',
+    def:'Total mechanical energy of a simple harmonic oscillator, constant over the cycle.',
+    vars:[ {sym:'E', name:'total mechanical energy'}, {sym:'k', name:'spring constant'}, {sym:'A', name:'amplitude'} ] },
+  { id:'waves-power', w:'Power transfer of a wave', eq:'P = \\frac{1}{2}\\mu\\omega^2A^2v', pos:'oscillation',
+    def:'Average power carried by a transverse wave on a string.',
+    vars:[ {sym:'P', name:'power'}, {sym:'\\mu', name:'linear mass density'}, {sym:'\\omega', name:'angular frequency'}, {sym:'A', name:'amplitude'}, {sym:'v', name:'wave speed'} ] },  
+  { id:'waves-lineareq', w:'Linear wave equation', eq:'\\frac{\\partial^2 y}{\\partial x^2} = \\frac{1}{v^2}\\frac{\\partial^2 y}{\\partial t^2}', pos:'oscillation',
+    def:'Partial differential equation governing the propagation of a wave.',
+    vars:[ {sym:'y', name:'displacement'}, {sym:'x', name:'position'}, {sym:'t', name:'time'}, {sym:'v', name:'wave speed'} ] },  
+  { id:'waves-doppler', w:'Doppler effect', eq:"f' = \\frac{(v + v_0)f}{v - v_s}", pos:'oscillation',
+    def:'Observed frequency shifts due to relative motion between a wave source and an observer.',
+    vars:[ {sym:"f'", name:'observed frequency'}, {sym:'f', name:'emitted frequency'}, {sym:'v', name:'wave speed in medium'}, {sym:'v_0', name:'observer speed (+ toward source)'}, {sym:'v_s', name:'source speed (+ toward observer)'} ] }, 
+  { id:'waves-shock', w:'Shock wave (Mach cone)', eq:'\\sin\\theta = \\frac{v}{v_s}', pos:'oscillation',
+    def:'Angle of the Mach cone formed when a source moves faster than the wave speed.',
+    vars:[ {sym:'\\theta', name:'Mach angle'}, {sym:'v', name:'wave speed'}, {sym:'v_s', name:'source speed'} ] },   
+  { id:'waves-intensity', w:'Intensity of sound', eq:'I = \\frac{P_{avg}}{A} = \\frac{1}{2}\\rho\\omega^2S_{max}^2v', pos:'oscillation',
+    def:'Sound intensity is power per unit area, related to the displacement amplitude of the medium.',
+    vars:[ {sym:'I', name:'intensity'}, {sym:'P_{avg}', name:'average power'}, {sym:'A', name:'area'}, {sym:'\\rho', name:'medium density'}, {sym:'\\omega', name:'angular frequency'}, {sym:'S_{max}', name:'displacement amplitude'}, {sym:'v', name:'wave speed'} ] },  
+  { id:'waves-waveeq', w:'Wave equation', eq:'y(x,t) = A\\sin(kx - \\omega t + \\varphi)', pos:'oscillation',
+    def:'Describes the displacement of a sinusoidal traveling wave as a function of position and time.',
+    vars:[ {sym:'y', name:'displacement'}, {sym:'A', name:'amplitude'}, {sym:'k', name:'wave number'}, {sym:'x', name:'position'}, {sym:'\\omega', name:'angular frequency'}, {sym:'t', name:'time'}, {sym:'\\varphi', name:'phase constant'} ] },  
+  { id:'waves-speedcord', w:'Wave speed on a cord', eq:'v = \\sqrt{\\frac{F_T}{\\mu}}', pos:'oscillation',
+    def:'Speed of a transverse wave on a string depends on the tension and linear mass density.',
+    vars:[ {sym:'v', name:'wave speed'}, {sym:'F_T', name:'tension'}, {sym:'\\mu', name:'linear mass density'} ] },  
+  { id:'waves-masspercord', w:'Mass per length', eq:'m_{cord} = \\mu L', pos:'oscillation',
+    def:'Total mass of a cord equals linear mass density times length.',
+    vars:[ {sym:'m_{cord}', name:'mass of cord'}, {sym:'\\mu', name:'linear mass density'}, {sym:'L', name:'length'} ] },
+  { id:'waves-construct', w:'Constructive interference', eq:'\\Delta\\Phi = \\pm 2\\pi n, \\quad \\Delta x = \\pm n\\lambda', pos:'oscillation',
+    def:'Condition for constructive interference expressed in terms of phase difference and path length difference.',
+    vars:[ {sym:'\\Delta\\Phi', name:'phase difference'}, {sym:'\\Delta x', name:'path length difference'}, {sym:'n', name:'integer (0, 1, 2, ...)'}, {sym:'\\lambda', name:'wavelength'} ] },
+  { id:'waves-destruct', w:'Destructive interference', eq:'\\Delta\\Phi = \\pm(2n-1)\\pi, \\quad \\Delta x = \\pm\\left(n-\\tfrac{1}{2}\\right)\\lambda', pos:'oscillation',
+    def:'Condition for destructive interference expressed in terms of phase difference and path length difference.',
+    vars:[ {sym:'\\Delta\\Phi', name:'phase difference'}, {sym:'\\Delta x', name:'path length difference'}, {sym:'n', name:'integer (0, 1, 2, ...)'}, {sym:'\\lambda', name:'wavelength'} ] }, 
+  { id:'waves-soundlevel', w:'Sound level', eq:'\\beta = 10\\log\\left(\\frac{I}{I_0}\\right)', pos:'oscillation',
+    def:'Sound intensity level in decibels, measured relative to a reference intensity.',
+    vars:[ {sym:'\\beta', name:'sound level (dB)'}, {sym:'I', name:'intensity'}, {sym:'I_0', name:'reference intensity (10^-12 W/m^2)'} ] },
+  { id:'waves-longitudinal', w:'Longitudinal wave displacement', eq:'s(x,t) = s_{max}\\cos(kx - \\omega t)', pos:'oscillation',
+    def:'Displacement of a medium element from equilibrium in a longitudinal (e.g. sound) wave.',
+    vars:[ {sym:'s', name:'displacement'}, {sym:'s_{max}', name:'displacement amplitude'}, {sym:'k', name:'wave number'}, {sym:'x', name:'position'}, {sym:'\\omega', name:'angular frequency'}, {sym:'t', name:'time'} ] },
+  { id:'waves-maxpressure', w:'Max change in pressure', eq:'\\Delta P_{max} = Bks_{max}', pos:'oscillation',
+    def:'Maximum pressure variation in a sound wave, related to the medium\'s bulk modulus.',
+    vars:[ {sym:'\\Delta P_{max}', name:'maximum pressure variation'}, {sym:'B', name:'bulk modulus'}, {sym:'k', name:'wave number'}, {sym:'s_{max}', name:'displacement amplitude'} ] },
+  { id:'waves-soundspeed', w:'Sound speed', eq:'v = \\sqrt{\\frac{B}{\\rho}} = 331\\sqrt{1+\\frac{T_C}{273}}', pos:'oscillation',
+    def:'Speed of sound in a medium depends on the bulk modulus and density, or approximately on air temperature.',
+    vars:[ {sym:'v', name:'sound speed'}, {sym:'B', name:'bulk modulus'}, {sym:'\\rho', name:'density'}, {sym:'T_C', name:'temperature (Celsius)'} ] },
+  { id:'waves-pressureamp', w:'Pressure amplitude', eq:'\\Delta P_{max} = \\rho v\\omega s_{max}', pos:'oscillation',
+    def:'Maximum pressure variation expressed in terms of density, wave speed, and displacement amplitude.',
+    vars:[ {sym:'\\Delta P_{max}', name:'maximum pressure variation'}, {sym:'\\rho', name:'density'}, {sym:'v', name:'wave speed'}, {sym:'\\omega', name:'angular frequency'}, {sym:'s_{max}', name:'displacement amplitude'} ] },
+  { id:'shm-kinetic', w:'Kinetic energy (SHM)', eq:'K = \\frac{1}{2}mv^2 = \\frac{1}{2}m\\omega^2A^2\\sin^2(\\omega t+\\varphi)', pos:'oscillation',
+    def:'Kinetic energy of an object undergoing simple harmonic motion, as a function of time.',
+    vars:[ {sym:'K', name:'kinetic energy'}, {sym:'m', name:'mass'}, {sym:'v', name:'speed'}, {sym:'\\omega', name:'angular frequency'}, {sym:'A', name:'amplitude'}, {sym:'t', name:'time'}, {sym:'\\varphi', name:'phase constant'} ] },
+  { id:'shm-potential', w:'Potential energy (SHM)', eq:'U = \\frac{1}{2}kx^2 = \\frac{1}{2}kA^2\\cos^2(\\omega t+\\varphi)', pos:'oscillation',
+    def:'Elastic potential energy of an object undergoing simple harmonic motion, as a function of time.',
+    vars:[ {sym:'U', name:'potential energy'}, {sym:'k', name:'spring constant'}, {sym:'x', name:'displacement'}, {sym:'A', name:'amplitude'}, {sym:'\\omega', name:'angular frequency'}, {sym:'t', name:'time'}, {sym:'\\varphi', name:'phase constant'} ] },   
+  
+
+  // ── Thermodynamics ──
+  { id:'thermo-ideal', w:'Ideal gas law', eq:'PV = nRT', pos:'thermo',
+    def:'Equation of state relating pressure, volume, and temperature for an ideal gas.',
+    vars:[ {sym:'P', name:'pressure'}, {sym:'V', name:'volume'}, {sym:'n', name:'amount of substance (moles)'}, {sym:'R', name:'ideal gas constant'}, {sym:'T', name:'absolute temperature'} ] },
+  
+  { id:'thermo-first', w:'First law of thermodynamics', eq:'\\Delta U = Q - W', pos:'thermo',
+    def:"Change in a system's internal energy equals heat added minus work done by the system.",
+    vars:[ {sym:'\\Delta U', name:'change in internal energy'}, {sym:'Q', name:'heat added to the system'}, {sym:'W', name:'work done by the system'} ] },
+  
+  { id:'thermo-q', w:'Heat capacity', eq:'Q = mc\\Delta T', pos:'thermo',
+    def:'Heat required to change the temperature of a mass m by ΔT.',
+    vars:[ {sym:'Q', name:'heat transferred'}, {sym:'m', name:'mass'}, {sym:'c', name:'specific heat capacity'}, {sym:'\\Delta T', name:'temperature change'} ] },
+  
+  { id:'thermo-lat', w:'Latent heat', eq:'Q = mL', pos:'thermo',
+    def:'Heat of transformation.',
+    vars:[ {sym:'Q', name:'latent heat'}, {sym:'m', name:'mass under phase change'}, {sym:'L', name:'latent of fusion or vaporization'} ] },    
+  
+  { id:'thermo-eff', w:'Efficiency of a heat engine', eq:'\\eta = \\dfrac{W}{Q_h} = 1 - \\dfrac{Q_c}{Q_h}', pos:'thermo',
+    def:'Fraction of heat input converted to useful work.',
+    vars:[ {sym:'\\eta', name:'efficiency'}, {sym:'W', name:'net work output'}, {sym:'Q_h', name:'heat absorbed from the hot reservoir'}, {sym:'Q_c', name:'heat expelled to the cold reservoir'} ] },
+  
+  { id:'thermo-carnot', w:'Carnot efficiency', eq:'\\eta_{max} = 1 - \\dfrac{T_c}{T_h}', pos:'thermo',
+    def:'Theoretical maximum efficiency of a heat engine operating between two temperatures.',
+    vars:[ {sym:'\\eta_{max}', name:'maximum (Carnot) efficiency'}, {sym:'T_c', name:'absolute temperature of the cold reservoir'}, {sym:'T_h', name:'absolute temperature of the hot reservoir'} ] },
+  
+  { id:'thermo-work', w:'Work in thermodynamics', eq:'W = -\\int_{V_0}^{V_f}P\\,dV', pos:'thermo',
+    def:'Work in terms or Pressure and volume.',
+    vars:[ {sym:'W', name:'work'}, {sym:'V', name:'volume'}, {sym:'P', name:'pressure'} ] },
+  
+  { id:'stefan-boltzmann', w:'Stefan-Boltzmann law', eq:'P = σAeT^4', pos:'thermo',
+    def:'Relationship between an object\'s temperature and it\'s brightness.',
+    vars:[ {sym:'P', name:'power / brightness'}, {sym:'A', name:'surface area of radiating object'}, {sym:'σ', name:'5.669 x 10^-8 W / m^2 K^4'}, {sym:'e', name:'emissitivity'}, {sym:'T', name:'temperature'} ] },
+  
+  { id:'thermo-lin-exp', w:'Thermal Expansion (Rod)', eq:'ΔL = αL_0ΔT', pos:'thermo',
+    def:'thermal length expansion of a rod due to heating',
+    vars:[ {sym:'ΔL', name:'change in length of rod'}, {sym:'ΔT', name:'change in temperature of rod'}, {sym:'α', name:'coefficient of linear expansion'}, {sym:'L_0', name:'initial length of rod'} ] }, 
+  
+  { id:'thermo-plan-exp', w:'Thermal Expansion (plane)', eq:'ΔA = 2αA_0ΔT', pos:'thermo',
+    def:'thermal area expansion of a plane due to heating',
+    vars:[ {sym:'ΔA', name:'change in area of plane'}, {sym:'ΔT', name:'change in temperature of plane'}, {sym:'α', name:'coefficient of linear expansion'}, {sym:'A_0', name:'initial area of plane'} ] },  
+  
+  { id:'thermo-lump-exp', w:'Thermal Expansion (Lump)', eq:'ΔV = 3αV_0ΔT', pos:'thermo',
+    def:'thermal area expansion of a lump due to heating',
+    vars:[ {sym:'ΔV', name:'change in volume of lump'}, {sym:'ΔT', name:'change in temperature of lump'}, {sym:'α', name:'coefficient of linear expansion'}, {sym:'V_0', name:'initial volume of lump'} ] },   
+  
+  { id:'wien-displ', w:'Wien\'s displacement law', eq:'λ_{peak} = \\dfrac{b}{T}', pos:'thermo',
+    def:"The peak wavelength of light emitted by a black body.",
+    vars:[ {sym:'λ_{peak}', name:'peak wavelength of light'}, {sym:'b', name:'wien\'s displacement constant = 2.898 x 10^-3 m K'}, {sym:'M', name:'mass of larger body'}, {sym:'m', name:'mass of smaller body'}, {sym:'D', name:'distance between the two bodies'} ] }, 
+  
+  { id:'pressure', w:'Pressure', eq:'P = \\frac{F}{A}', pos:'thermo',
+    def:'Pressure is force applied per unit area.',
+    vars:[ {sym:'P', name:'pressure'}, {sym:'F', name:'force'}, {sym:'A', name:'area'} ] }, 
+  
+  { id:'thermo-kavg', w:'Average kinetic energy', eq:'K_{avg} = \\frac{1}{2}m\\overline{v^2} = \\frac{3}{2}k_BT = \\frac{3}{2}RT', pos:'thermo', 
+    def:'Average translational kinetic energy of gas molecules, expressed per-molecule (Boltzmann constant) or per-mole (gas constant).',
+    vars:[ {sym:'K_{avg}', name:'average kinetic energy'}, {sym:'m', name:'molecular mass'}, {sym:'v', name:'molecular speed'}, {sym:'k_B', name:'Boltzmann constant = 1.3806 x 10^-23 m²·kg/s²·K'}, {sym:'T', name:'temperature'}, {sym:'R', name:'universal gas constant = 8.314 J·mol/K'} ] }, 
+  
+  { id:'thermo-molarheat', w:'Molar specific heat', eq:'\\Delta E = nC\\Delta T', pos:'thermo',
+  def:'Change in internal energy equals moles times molar specific heat times temperature change.',
+  vars:[ {sym:'\\Delta E', name:'change in internal energy'}, {sym:'n', name:'number of moles'}, {sym:'C', name:'molar specific heat'}, {sym:'\\Delta T', name:'change in temperature'} ] },
+  
+  { id:'thermo-equipartition', w:'Equipartition theorem', eq:'E = \\frac{Ndk_BT}{2} = \\frac{ndRT}{2}', pos:'thermo',
+  def:'Internal energy is distributed equally among each degree of freedom of a system.',
+  vars:[ {sym:'E', name:'internal energy'}, {sym:'N', name:'number of molecules'}, {sym:'d', name:'degrees of freedom'}, {sym:'k_B', name:'Boltzmann constant = 1.3806 x 10^-23 m²·kg/s²·K'}, {sym:'T', name:'temperature'}, {sym:'n', name:'number of moles'}, {sym:'R', name:'universal gas constant = 8.314 J·mol/K'} ] },
+  
+  { id:'thermo-adiabatic-p', w:'Adiabatic process (pressure)', eq:'P_0V_0^{\\gamma} = P_fV_f^{\\gamma}', pos:'thermo',
+  def:'Relation between pressure and volume for a gas undergoing an adiabatic process.',
+  vars:[ {sym:'P_0,\\,P_f', name:'initial, final pressure'}, {sym:'V_0,\\,V_f', name:'initial, final volume'}, {sym:'\\gamma', name:'heat capacity ratio'} ] }, 
+  
+  { id:'thermo-adiabatic-t', w:'Adiabatic process (temperature)', eq:'T_0V_0^{\\gamma-1} = T_fV_f^{\\gamma-1}', pos:'thermo',
+  def:'Relation between temperature and volume for a gas undergoing an adiabatic process.',
+  vars:[ {sym:'T_0,\\,T_f', name:'initial, final temperature'}, {sym:'V_0,\\,V_f', name:'initial, final volume'}, {sym:'\\gamma', name:'heat capacity ratio'} ] },  
+  
+  { id:'thermo-heatengine', w:'Heat engines', eq:'W = Q_{hot} - Q_{cold}', pos:'thermo',
+  def:'Work output of a heat engine equals heat absorbed from the hot reservoir minus heat expelled to the cold reservoir.',
+  vars:[ {sym:'W', name:'work done'}, {sym:'Q_{hot}', name:'heat absorbed'}, {sym:'Q_{cold}', name:'heat expelled'} ] },
+  
+  { id:'thermo-heatpump', w:'Heat pumps', eq:'COP = \\frac{Q}{W}', pos:'thermo',
+    def:'Coefficient of performance is the ratio of heat transferred to work input.',
+    vars:[ {sym:'COP', name:'coefficient of performance'}, {sym:'Q', name:'heat transferred'}, {sym:'W', name:'work input'} ] },
+  
+  { id:'thermo-isobaric', w:'Isobaric process', eq:'W = -P\\Delta V, \\quad \\Delta P = 0', pos:'thermo',
+    def:'Work done by the gas at constant pressure; pressure does not change during the process.',
+    vars:[ {sym:'W', name:'work done by gas'}, {sym:'P', name:'pressure'}, {sym:'\\Delta V', name:'change in volume'} ] },
+  
+  { id:'thermo-cyclic', w:'Cyclic process', eq:'W = -Q, \\quad \\Delta E_{int} = 0', pos:'thermo',
+    def:'Over a full cycle the system returns to its initial state, so internal energy change is zero and work equals heat exchanged.',
+    vars:[ {sym:'W', name:'work done by gas'}, {sym:'Q', name:'heat exchanged'}, {sym:'\\Delta E_{int}', name:'change in internal energy'} ] },  
+  
+  { id:'thermo-isochoric', w:'Isochoric process', eq:'W = 0, \\quad \\Delta V = 0', pos:'thermo',
+    def:'No work is done at constant volume, since the volume does not change.',
+    vars:[ {sym:'W', name:'work done by gas'}, {sym:'\\Delta V', name:'change in volume'} ] },
+
+  { id:'thermo-isothermal', w:'Isothermal process', eq:'W = -P_0V_0\\ln\\left(\\frac{V_f}{V_0}\\right), \\quad \\Delta T = 0', pos:'thermo',
+    def:'Work done by the gas at constant temperature, where pressure and volume vary inversely.',
+    vars:[ {sym:'W', name:'work done by gas'}, {sym:'P_0', name:'initial pressure'}, {sym:'V_0,\\,V_f', name:'initial, final volume'} ] },
+
+  { id:'thermo-adiabaticw', w:'Adiabatic process (work)', eq:'W = \\frac{P_fV_f - P_0V_0}{\\gamma - 1}, \\quad Q = 0', pos:'thermo',
+    def:'Work done by the gas during an adiabatic process, where no heat is exchanged with the surroundings.',
+    vars:[ {sym:'W', name:'work done by gas'}, {sym:'P_0,\\,P_f', name:'initial, final pressure'}, {sym:'V_0,\\,V_f', name:'initial, final volume'}, {sym:'\\gamma', name:'heat capacity ratio'}, {sym:'Q', name:'heat exchanged'} ] },
+
+  { id:'thermo-heatratio', w:'Specific heat ratio', eq:'\\gamma = \\frac{C_P}{C_V}', pos:'thermo',
+    def:'Ratio of molar specific heat at constant pressure to molar specific heat at constant volume.',
+    vars:[ {sym:'\\gamma', name:'heat capacity ratio'}, {sym:'C_P', name:'molar specific heat at constant pressure'}, {sym:'C_V', name:'molar specific heat at constant volume'} ] },
+
+  { id:'thermo-cv', w:'Heat capacity at constant volume', eq:'C_V = \\frac{dR}{2}', pos:'thermo',
+    def:'Molar specific heat at constant volume depends on the number of degrees of freedom of the gas.',
+    vars:[ {sym:'C_V', name:'molar specific heat at constant volume'}, {sym:'d', name:'degrees of freedom'}, {sym:'R', name:'universal gas constant'} ] },
+
+  { id:'thermo-cp', w:'Heat capacity at constant pressure', eq:'C_P = \\frac{(d+2)R}{2}', pos:'thermo',
+    def:'Molar specific heat at constant pressure exceeds C_V by R, accounting for expansion work.',
+    vars:[ {sym:'C_P', name:'molar specific heat at constant pressure'}, {sym:'d', name:'degrees of freedom'}, {sym:'R', name:'universal gas constant'} ] },
+
+  { id:'thermo-conduction', w:'Thermal conduction', eq:'P = \\frac{kA\\Delta T}{\\Delta x} = \\frac{\\Delta Q}{\\Delta t}', pos:'thermo',
+    def:'Rate of heat conduction through a material depends on thermal conductivity, cross-sectional area, and temperature gradient.',
+    vars:[ {sym:'P', name:'power (rate of heat transfer)'}, {sym:'k', name:'thermal conductivity'}, {sym:'A', name:'cross-sectional area'}, {sym:'\\Delta T', name:'temperature difference'}, {sym:'\\Delta x', name:'thickness'}, {sym:'\\Delta Q/\\Delta t', name:'heat transfer rate'} ] },
+
+  { id:'thermo-power', w:'Power', eq:'P = \\frac{\\Delta E}{\\Delta t}', pos:'thermo',
+    def:'Power is the rate at which energy is transferred or transformed.',
+    vars:[ {sym:'P', name:'power'}, {sym:'\\Delta E', name:'change in energy'}, {sym:'\\Delta t', name:'change in time'} ] },  
+
+  // ── Electromagnetism ──
+  { id:'em-coulomb', w:"Coulomb's law", eq:'F = \\dfrac{k_e q_1 q_2}{r^2}', pos:'em',
+    def:'Electrostatic force between two point charges.',
+    vars:[ {sym:'F', name:'electrostatic force'}, {sym:'k_e', name:"Coulomb's constant"}, {sym:'q_1,\\,q_2', name:'the two point charges'}, {sym:'r', name:'distance between the charges'} ] },
+  { id:'em-efield', w:'Electric field', eq:'E = \\dfrac{F}{q} = \\dfrac{k_e Q}{r^2}', pos:'em',
+    def:'Force per unit charge produced by a source charge Q.',
+    vars:[ {sym:'E', name:'electric field strength'}, {sym:'F', name:'force on the test charge'}, {sym:'q', name:'test charge'}, {sym:'Q', name:'source charge'}, {sym:'r', name:'distance from the source charge'} ] },
+  { id:'em-ohm', w:"Ohm's law", eq:'V = IR', pos:'em',
+    def:'Relates voltage, current, and resistance in a resistive circuit element.',
+    vars:[ {sym:'V', name:'voltage (potential difference)'}, {sym:'I', name:'current'}, {sym:'R', name:'resistance'} ] },
+  { id:'em-power', w:'Electric power (resistive)', eq:'P = IV = I^2R', pos:'em',
+    def:'Power dissipated by a resistive element.',
+    vars:[ {sym:'P', name:'power'}, {sym:'I', name:'current'}, {sym:'V', name:'voltage'}, {sym:'R', name:'resistance'} ] },
+  { id:'em-faraday', w:"Faraday's law of induction", eq:'\\mathcal{E} = -\\dfrac{d\\Phi_B}{dt}', pos:'em',
+    def:'Induced EMF equals the negative rate of change of magnetic flux through a circuit.',
+    vars:[ {sym:'\\mathcal E', name:'induced electromotive force (EMF)'}, {sym:'\\Phi_B', name:'magnetic flux through the circuit'}, {sym:'t', name:'time'} ] },
+  { id:'em-magforce', w:'Magnetic force on a moving charge', eq:'F = qvB\\sin\\theta', pos:'em',
+    def:'Force on a charge q moving through a magnetic field B.',
+    vars:[ {sym:'F', name:'magnetic force'}, {sym:'q', name:'charge'}, {sym:'v', name:'speed of the charge'}, {sym:'B', name:'magnetic field strength'}, {sym:'\\theta', name:'angle between velocity and field'} ] },
+];
+
+
+// ─── SIMULATIONS REGISTRY ────────────────────────────────────────────────────
+const SIMS = {};
+let _simRaf = null;
+
+function _stopSim() {
+  if (_simRaf) { cancelAnimationFrame(_simRaf); _simRaf = null; }
+  document.getElementById('sim-host').innerHTML = '';
+}
+
+function openSimulation(id) {
+  const sim = SIMS[id];
+  if (!sim) return;
+  _stopSim();
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('header nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('simulation').classList.add('active');
+  window.scrollTo(0, 0);
+  const host = document.getElementById('sim-host');
+  host.innerHTML = `<h1 class="section-title" style="margin-bottom:.25rem">${sim.title}</h1>
+    <p class="section-sub" style="margin-bottom:1.5rem">${sim.subtitle}</p>`;
+  sim.build(host);
+}
+
+function closeSimulation() {
+  _stopSim();
+  showSection('dictionary', document.querySelector('header nav button'));
+}
+
+// ─── DICTIONARY RENDER ───────────────────────────────────────────────────────
+function renderDict(data) {
+  const grid = document.getElementById('dict-grid');
+  if (!data.length) { grid.innerHTML = '<div class="no-results">No equations found. Try a different search.</div>'; return; }
+  grid.innerHTML = data.map(d => {
+    const hasSim = !!SIMS[d.id];
+    return `
+    <div class="dict-card${hasSim ? ' has-sim' : ''}"${hasSim ? ` onclick="openSimulation('${d.id}')"` : ''}>
+      <div class="dict-word">${d.w}</div>
+      <div class="dict-pos">${POS_LABELS[d.pos] || d.pos}</div>
+      <div class="dict-eq">$$${d.eq}$$</div>
+      <div class="dict-def">${d.def}</div>
+      <div class="dict-vars">
+        ${d.vars.map(v => `<div class="vrow"><span class="vsym">$${v.sym}$</span><span>— ${v.name}</span></div>`).join('')}
+      </div>
+      ${d.tag ? `<span class="dict-tag">${d.tag}</span>` : ''}
+      ${hasSim ? `<span class="sim-badge">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        Open simulation
+      </span>` : ''}
+    </div>`;
+  }).join('');
+  renderMath();
+}
+
+function filterDict() {
+  const q = document.getElementById('dict-search').value.toLowerCase();
+  const pos = document.getElementById('dict-pos').value;
+  const filtered = DICT.filter(d => {
+    const matchQ = !q || d.w.toLowerCase().includes(q) || d.def.toLowerCase().includes(q)
+      || (POS_LABELS[d.pos]||'').toLowerCase().includes(q)
+      || d.vars.some(v => v.name.toLowerCase().includes(q));
+    const matchPos = !pos || d.pos === pos;
+    return matchQ && matchPos;
+  });
+  renderDict(filtered);
+}
+
+// ─── DERIVATIONS NAV ─────────────────────────────────────────────────────────
+function showGrammar(id, btn) {
+  document.querySelectorAll('.grammar-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.toc-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('g-' + id).classList.add('active');
+  btn.classList.add('active');
+  renderMath();
+}
+
+// ─── FLASHCARDS ──────────────────────────────────────────────────────────────
+let fcDeck = [], fcIdx = 0, fcFlipped = false;
+
+function setFcFilter(pos, btn) {
+  document.querySelectorAll('.fc-filter button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  fcDeck = pos ? DICT.filter(d => d.pos === pos) : [...DICT];
+  fcIdx = 0; fcFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+  renderCard();
+}
+
+function renderCard() {
+  if (!fcDeck.length) return;
+  const d = fcDeck[fcIdx];
+  document.getElementById('fc-eq').innerHTML = `$$${d.eq}$$`;
+  document.getElementById('fc-word').textContent = d.w;
+  document.getElementById('fc-hint').innerHTML = d.vars.map(v => `$${v.sym}$ — ${v.name}`).join('<br>');
+  document.getElementById('fc-counter').textContent = `${fcIdx + 1} / ${fcDeck.length}`;
+  document.getElementById('flashcard').classList.remove('flipped');
+  fcFlipped = false;
+  renderMath();
+}
+
+function flipCard() {
+  fcFlipped = !fcFlipped;
+  document.getElementById('flashcard').classList.toggle('flipped', fcFlipped);
+}
+
+function nextCard() { fcIdx = (fcIdx + 1) % fcDeck.length; renderCard(); }
+function prevCard() { fcIdx = (fcIdx - 1 + fcDeck.length) % fcDeck.length; renderCard(); }
+function shuffleCards() {
+  for (let i = fcDeck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [fcDeck[i], fcDeck[j]] = [fcDeck[j], fcDeck[i]];
+  }
+  fcIdx = 0; renderCard();
+}
+
+// ─── SECTION NAV ─────────────────────────────────────────────────────────────
+function showSection(id, btn) {
+  _stopSim();
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('header nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  renderMath();
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// SIMULATION — Kepler's Third Law   T² = 4π²a³ / (GM)
+// Units: AU, solar masses, years  →  T² = a³/M  (G=4π² absorbed)
+// Proper elliptical orbit via Newton–Raphson eccentric-anomaly solver
+// ════════════════════════════════════════════════════════════════════════════
+SIMS['grav-kepler3'] = {
+  title: "Kepler's Third Law",
+  subtitle: "Adjust the central mass M, semi-major axis a, and eccentricity e — watch the orbit reshape and the period update in real time.",
+
+  build(host) {
+    const state = { M: 1, a: 1, e: 0.3, meanAnomaly: 0, trail: [] };
+
+    host.insertAdjacentHTML('beforeend', `
+      <div class="sim-layout">
+        <div class="sim-canvas-wrap"><canvas id="kep-canvas"></canvas></div>
+        <div class="sim-panel">
+
+          <div class="sim-equation">
+            <div class="eq-label">Equation</div>
+            <div class="eq-display">$$T^2 = \\dfrac{4\\pi^2}{GM}\\,a^3$$</div>
+          </div>
+
+          <div class="sim-controls">
+            <h3>Variables</h3>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">M</span> — central mass</span>
+                <span class="sl-val" id="lM">1.00 M☉</span>
+              </div>
+              <input type="range" id="sM" min="0.2" max="4" step="0.05" value="1">
+            </div>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">a</span> — semi-major axis</span>
+                <span class="sl-val" id="la">1.00 AU</span>
+              </div>
+              <input type="range" id="sa" min="0.3" max="3.5" step="0.05" value="1">
+            </div>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">e</span> — eccentricity</span>
+                <span class="sl-val" id="le">0.30</span>
+              </div>
+              <input type="range" id="se" min="0" max="0.92" step="0.01" value="0.3">
+            </div>
+          </div>
+
+          <div class="sim-readout">
+            <h3>Live Readout</h3>
+            <div class="readout-row"><span class="rkey">Period T</span><span class="rval hi" id="rT">—</span></div>
+            <div class="readout-row"><span class="rkey">Semi-major axis a</span><span class="rval" id="ra">—</span></div>
+            <div class="readout-row"><span class="rkey">Semi-minor axis b</span><span class="rval" id="rb">—</span></div>
+            <div class="readout-row"><span class="rkey">Periapsis</span><span class="rval" id="rq">—</span></div>
+            <div class="readout-row"><span class="rkey">Apoapsis</span><span class="rval" id="rQ">—</span></div>
+            <div class="readout-row"><span class="rkey">Current speed</span><span class="rval" id="rv">—</span></div>
+          </div>
+
+          <div class="sim-legend">
+            <h3>Legend</h3>
+            <div class="legend-row"><div class="legend-dot" style="background:#FFD166"></div>Central body (M)</div>
+            <div class="legend-row"><div class="legend-dot" style="background:#5B8DEF"></div>Orbiting planet</div>
+            <div class="legend-row"><div class="legend-line" style="border-color:#4ECDC4;opacity:.6"></div>Orbital trail</div>
+            <div class="legend-row"><div class="legend-line" style="border-color:#8A7A65;border-top-style:dashed"></div>Semi-major axis a</div>
+            <div class="legend-row"><div class="legend-dot" style="background:#F783AC"></div>Velocity vector</div>
+          </div>
+        </div>
+      </div>`);
+
+    renderMath();
+
+    // ── Canvas ──
+    const canvas = document.getElementById('kep-canvas');
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+
+    function resize() {
+      const sz = canvas.parentElement.clientWidth;
+      canvas.width  = sz * dpr;
+      canvas.height = sz * dpr;
+      canvas.style.width  = sz + 'px';
+      canvas.style.height = sz + 'px';
+      ctx.resetTransform();
+      ctx.scale(dpr, dpr);
+      state.trail = [];
+    }
+    resize();
+    const _ro = new ResizeObserver(resize);
+    _ro.observe(canvas.parentElement);
+
+    // ── Sliders ──
+    function readSliders() {
+      state.M = parseFloat(document.getElementById('sM').value);
+      state.a = parseFloat(document.getElementById('sa').value);
+      state.e = parseFloat(document.getElementById('se').value);
+      document.getElementById('lM').textContent = state.M.toFixed(2) + ' M☉';
+      document.getElementById('la').textContent = state.a.toFixed(2) + ' AU';
+      document.getElementById('le').textContent = state.e.toFixed(2);
+      state.trail = [];
+    }
+    ['sM','sa','se'].forEach(id => document.getElementById(id).addEventListener('input', readSliders));
+
+    // ── Orbital math ──
+    function solveE(M, e) {       // Newton–Raphson for eccentric anomaly
+      let E = M;
+      for (let i = 0; i < 12; i++) E -= (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+      return E;
+    }
+    function trueAnomaly(E, e) {
+      return 2 * Math.atan2(Math.sqrt(1 + e) * Math.sin(E / 2), Math.sqrt(1 - e) * Math.cos(E / 2));
+    }
+
+    function sz() { return canvas.width / dpr; }
+    function auPx(au) { return au * (sz() * 0.5 / 3.9); }   // scale: 3.9 AU fits canvas half-width
+
+    function planetPos(M_anom) {
+      const E  = solveE(M_anom, state.e);
+      const nu = trueAnomaly(E, state.e);
+      const b  = state.a * Math.sqrt(1 - state.e * state.e);
+      const c  = state.a * state.e;                          // focus offset from ellipse centre
+      const x  = auPx(state.a * Math.cos(nu) - c);          // in canvas frame, focus at origin
+      const y  = auPx(b * Math.sin(nu));
+      const r  = state.a * (1 - state.e * state.e) / (1 + state.e * Math.cos(nu));
+      return { x: sz()/2 + x, y: sz()/2 - y, nu, r };
+    }
+
+    function orbitalSpeed(r) {                               // vis-viva, AU/yr
+      const GM = 4 * Math.PI * Math.PI * state.M;
+      return Math.sqrt(GM * (2/r - 1/state.a));
+    }
+
+    // ── Draw ──
+    function draw(pos) {
+      const S = sz();
+      ctx.clearRect(0, 0, S, S);
+
+      // subtle grid
+      ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+      ctx.lineWidth = 1;
+      const step = auPx(0.5);
+      for (let x = (S/2) % step; x < S; x += step) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,S); ctx.stroke(); }
+      for (let y = (S/2) % step; y < S; y += step) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(S,y); ctx.stroke(); }
+
+      // orbit path (ghost ellipse)
+      
+
+      // semi-major axis dashed line (periapsis ↔ apoapsis through focus)
+      const peri = planetPos(0), apo = planetPos(Math.PI);
+      ctx.beginPath();
+      ctx.moveTo(peri.x, peri.y);
+      ctx.lineTo(apo.x,  apo.y);
+      ctx.strokeStyle = 'rgba(138,122,101,0.45)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4,4]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // 'a' label at midpoint
+      const mx = (peri.x + apo.x)/2, my = (peri.y + apo.y)/2;
+      ctx.fillStyle = 'rgba(138,122,101,0.85)';
+      ctx.font = `${Math.max(10, S*0.032)}px 'DM Mono', monospace`;
+      ctx.textAlign = 'center';
+      ctx.fillText('a', mx, my - 7);
+
+      // trail
+      if (state.trail.length > 1) {
+        ctx.beginPath();
+        ctx.moveTo(state.trail[0].x, state.trail[0].y);
+        for (let i = 1; i < state.trail.length; i++) ctx.lineTo(state.trail[i].x, state.trail[i].y);
+        ctx.strokeStyle = 'rgba(78,205,196,0.45)';
+        ctx.lineWidth = 1.5;
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+      }
+
+      // central body glow + disc
+      const starR = Math.max(8, S * 0.028);
+      const grd = ctx.createRadialGradient(S/2, S/2, 0, S/2, S/2, starR * 3.5);
+      grd.addColorStop(0,   'rgba(255,209,102,0.45)');
+      grd.addColorStop(0.4, 'rgba(255,180,60,0.15)');
+      grd.addColorStop(1,   'rgba(255,180,60,0)');
+      ctx.beginPath(); ctx.arc(S/2, S/2, starR*3.5, 0, 2*Math.PI);
+      ctx.fillStyle = grd; ctx.fill();
+      ctx.beginPath(); ctx.arc(S/2, S/2, starR, 0, 2*Math.PI);
+      ctx.fillStyle = '#FFD166'; ctx.fill();
+      ctx.fillStyle = '#1A1209';
+      ctx.font = `bold ${Math.max(8, starR*0.72)}px 'DM Mono', monospace`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('M', S/2, S/2);
+      ctx.textBaseline = 'alphabetic';
+
+      // planet glow + disc
+      const planetR = Math.max(5, S * 0.018);
+      const pg = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, planetR*3);
+      pg.addColorStop(0, 'rgba(91,141,239,0.55)');
+      pg.addColorStop(1, 'rgba(91,141,239,0)');
+      ctx.beginPath(); ctx.arc(pos.x, pos.y, planetR*3, 0, 2*Math.PI);
+      ctx.fillStyle = pg; ctx.fill();
+      ctx.beginPath(); ctx.arc(pos.x, pos.y, planetR, 0, 2*Math.PI);
+      ctx.fillStyle = '#5B8DEF'; ctx.fill();
+
+      // velocity arrow
+      const spd    = orbitalSpeed(pos.r);
+      const spdMax = orbitalSpeed(state.a * (1 - state.e));   // max speed at periapsis
+      const arLen  = Math.max(14, S * 0.11) * Math.min(spd / spdMax, 1.5);
+      const vAng   = pos.nu + Math.PI/2;
+      const tx     = pos.x + Math.cos(vAng) * arLen;
+      const ty     = pos.y - Math.sin(vAng) * arLen;
+      const ang    = Math.atan2(ty - pos.y, tx - pos.x);
+      const hl     = 7;
+      ctx.beginPath(); ctx.moveTo(pos.x, pos.y); ctx.lineTo(tx, ty);
+      ctx.strokeStyle = 'rgba(247,131,172,0.9)'; ctx.lineWidth = 1.8; ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(tx, ty);
+      ctx.lineTo(tx - hl*Math.cos(ang-0.42), ty - hl*Math.sin(ang-0.42));
+      ctx.lineTo(tx - hl*Math.cos(ang+0.42), ty - hl*Math.sin(ang+0.42));
+      ctx.closePath(); ctx.fillStyle = 'rgba(247,131,172,0.9)'; ctx.fill();
+
+      // period label top-left
+      const T = Math.sqrt(Math.pow(state.a, 3) / state.M);
+      ctx.fillStyle = 'rgba(255,209,102,0.9)';
+      ctx.font = `${Math.max(10, S*0.032)}px 'DM Mono', monospace`;
+      ctx.textAlign = 'left';
+      ctx.fillText(`T = ${T.toFixed(3)} yr`, S*0.04, S*0.07);
+
+      // speed label near arrow tip
+      ctx.fillStyle = 'rgba(247,131,172,0.85)';
+      ctx.textAlign = 'center';
+      ctx.fillText(`v = ${spd.toFixed(2)} AU/yr`, tx + Math.cos(vAng)*18, ty - Math.sin(vAng)*18);
+    }
+
+    function updateReadout(pos) {
+      const T = Math.sqrt(Math.pow(state.a, 3) / state.M);
+      const b = state.a * Math.sqrt(1 - state.e*state.e);
+      document.getElementById('rT').textContent = T.toFixed(4) + ' yr';
+      document.getElementById('ra').textContent = state.a.toFixed(3) + ' AU';
+      document.getElementById('rb').textContent = b.toFixed(3) + ' AU';
+      document.getElementById('rq').textContent = (state.a*(1-state.e)).toFixed(3) + ' AU';
+      document.getElementById('rQ').textContent = (state.a*(1+state.e)).toFixed(3) + ' AU';
+      document.getElementById('rv').textContent = orbitalSpeed(pos.r).toFixed(2) + ' AU/yr';
+    }
+
+    // ── Animation loop ──
+    let last = null;
+    function frame(ts) {
+      _simRaf = requestAnimationFrame(frame);
+      const dt = last ? Math.min((ts - last) / 1000, 0.05) : 0;
+      last = ts;
+
+      const T = Math.sqrt(Math.pow(state.a, 3) / state.M);
+      const n = (2 * Math.PI / T) * 1.4;   // mean motion × speed factor (1.4 yr/s)
+      state.meanAnomaly = (state.meanAnomaly + n * dt) % (2 * Math.PI);
+
+      const pos = planetPos(state.meanAnomaly);
+      state.trail.push({ x: pos.x, y: pos.y });
+      if (state.trail.length > 230) state.trail.shift();
+
+      draw(pos);
+      updateReadout(pos);
+    }
+    _simRaf = requestAnimationFrame(frame);
+  }
+};
+
+
+SIMS['kin-x'] = {
+  title: "Vertical Launch — Distance vs. Time",
+  subtitle: "Adjust launch speed v₀, initial height x₀, and gravity g — watch the parabola reshape and the marker trace x(t) in real time.",
+
+  build(host) {
+    const state = { v0: 20, x0: 0, g: 9.8, t: 0, tMax: 1, xMax: 1, trail: [] };
+
+    host.insertAdjacentHTML('beforeend', `
+      <div class="sim-layout">
+        <div class="sim-canvas-wrap"><canvas id="kinxt-canvas"></canvas></div>
+        <div class="sim-panel">
+
+          <div class="sim-equation">
+            <div class="eq-label">Equation</div>
+            <div class="eq-display">$$x(t) = x_0 + v_0 t - \\dfrac{1}{2}g t^2$$</div>
+          </div>
+
+          <div class="sim-controls">
+            <h3>Variables</h3>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">v₀</span> — launch speed</span>
+                <span class="sl-val" id="lv0">20.0 m/s</span>
+              </div>
+              <input type="range" id="sv0" min="0" max="40" step="0.5" value="20">
+            </div>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">x₀</span> — initial height</span>
+                <span class="sl-val" id="lx0">0.0 m</span>
+              </div>
+              <input type="range" id="sx0" min="0" max="50" step="0.5" value="0">
+            </div>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">g</span> — gravity</span>
+                <span class="sl-val" id="lg">9.80 m/s²</span>
+              </div>
+              <input type="range" id="sg" min="1" max="20" step="0.1" value="9.8">
+            </div>
+          </div>
+
+          <div class="sim-readout">
+            <h3>Live Readout</h3>
+            <div class="readout-row"><span class="rkey">Time of flight</span><span class="rval hi" id="rT">—</span></div>
+            <div class="readout-row"><span class="rkey">Time to apex</span><span class="rval" id="rTa">—</span></div>
+            <div class="readout-row"><span class="rkey">Max height</span><span class="rval" id="rXmax">—</span></div>
+            <div class="readout-row"><span class="rkey">Current time t</span><span class="rval" id="rt">—</span></div>
+            <div class="readout-row"><span class="rkey">Current height x(t)</span><span class="rval" id="rx">—</span></div>
+            <div class="readout-row"><span class="rkey">Current velocity</span><span class="rval" id="rv">—</span></div>
+            <div class="readout-row"><span class="rkey">Impact velocity</span><span class="rval" id="rvi">—</span></div>
+          </div>
+
+          <div class="sim-legend">
+            <h3>Legend</h3>
+            <div class="legend-row"><div class="legend-line" style="border-color:#4ECDC4;opacity:.7"></div>x(t) trajectory</div>
+            <div class="legend-row"><div class="legend-dot" style="background:#5B8DEF"></div>Current position</div>
+            <div class="legend-row"><div class="legend-dot" style="background:#FFD166"></div>Apex (max height)</div>
+            <div class="legend-row"><div class="legend-line" style="border-color:#8A7A65;border-top-style:dashed"></div>Ground (x = 0)</div>
+            <div class="legend-row"><div class="legend-line" style="border-color:#F783AC;border-top-style:dashed"></div>t / x guides</div>
+          </div>
+        </div>
+      </div>`);
+
+    renderMath();
+
+    // ── Canvas ──
+    const canvas = document.getElementById('kinxt-canvas');
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+
+    const PAD = { l: 58, r: 24, t: 28, b: 44 };
+
+    function resize() {
+      const w = canvas.parentElement.clientWidth;
+      const h = Math.max(280, w * 0.6);
+      canvas.width  = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width  = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.resetTransform();
+      ctx.scale(dpr, dpr);
+      state.trail = [];
+    }
+    resize();
+    const _ro = new ResizeObserver(resize);
+    _ro.observe(canvas.parentElement);
+
+    // ── Sliders ──
+    function readSliders() {
+      state.v0 = parseFloat(document.getElementById('sv0').value);
+      state.x0 = parseFloat(document.getElementById('sx0').value);
+      state.g  = parseFloat(document.getElementById('sg').value);
+      document.getElementById('lv0').textContent = state.v0.toFixed(1) + ' m/s';
+      document.getElementById('lx0').textContent = state.x0.toFixed(1) + ' m';
+      document.getElementById('lg').textContent  = state.g.toFixed(2) + ' m/s²';
+      state.t = 0;
+      state.trail = [];
+      recompute();
+    }
+    ['sv0','sx0','sg'].forEach(id => document.getElementById(id).addEventListener('input', readSliders));
+
+    // ── Kinematics ──
+    function heightAt(t) { return state.x0 + state.v0 * t - 0.5 * state.g * t * t; }
+    function velAt(t)    { return state.v0 - state.g * t; }
+
+    function flightTime() {
+      // solve 0.5 g t^2 - v0 t - x0 = 0 for the positive root (return to x = 0)
+      const disc = state.v0 * state.v0 + 2 * state.g * state.x0;
+      if (state.g <= 0) return state.x0 > 0 ? 5 : 1; // degenerate fallback
+      return (state.v0 + Math.sqrt(Math.max(disc, 0))) / state.g;
+    }
+
+    function recompute() {
+      state.tMax = Math.max(flightTime(), 0.1);
+      const apexT = Math.max(state.v0 / state.g, 0);
+      const apexX = heightAt(Math.min(apexT, state.tMax));
+      state.xMax = Math.max(apexX, state.x0, heightAt(0)) * 1.15 || 1;
+      if (state.xMax <= 0) state.xMax = 1;
+    }
+    recompute();
+
+    // ── Coordinate mapping ──
+    function W() { return canvas.width / dpr; }
+    function H() { return canvas.height / dpr; }
+    function tPx(t) { return PAD.l + (t / state.tMax) * (W() - PAD.l - PAD.r); }
+    function xPx(x) { return H() - PAD.b - (x / state.xMax) * (H() - PAD.t - PAD.b); }
+
+    // ── Draw ──
+    function draw() {
+      const w = W(), h = H();
+      ctx.clearRect(0, 0, w, h);
+
+      // grid
+      ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+      ctx.lineWidth = 1;
+      const gridLinesX = 6, gridLinesY = 5;
+      for (let i = 0; i <= gridLinesX; i++) {
+        const t = (i / gridLinesX) * state.tMax;
+        const px = tPx(t);
+        ctx.beginPath(); ctx.moveTo(px, PAD.t); ctx.lineTo(px, h - PAD.b); ctx.stroke();
+      }
+      for (let i = 0; i <= gridLinesY; i++) {
+        const x = (i / gridLinesY) * state.xMax;
+        const py = xPx(x);
+        ctx.beginPath(); ctx.moveTo(PAD.l, py); ctx.lineTo(w - PAD.r, py); ctx.stroke();
+      }
+
+      // axes
+      ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(PAD.l, PAD.t); ctx.lineTo(PAD.l, h - PAD.b); ctx.lineTo(w - PAD.r, h - PAD.b); ctx.stroke();
+
+      // axis tick labels
+      ctx.fillStyle = 'rgba(230,224,212,0.7)';
+      ctx.font = `${Math.max(9, w * 0.022)}px 'DM Mono', monospace`;
+      ctx.textAlign = 'center';
+      for (let i = 0; i <= gridLinesX; i++) {
+        const t = (i / gridLinesX) * state.tMax;
+        ctx.fillText(t.toFixed(2) + 's', tPx(t), h - PAD.b + 16);
+      }
+      ctx.textAlign = 'right';
+      for (let i = 0; i <= gridLinesY; i++) {
+        const x = (i / gridLinesY) * state.xMax;
+        ctx.fillText(x.toFixed(1) + 'm', PAD.l - 8, xPx(x) + 3);
+      }
+
+      // ground line (x = 0)
+      ctx.beginPath();
+      ctx.moveTo(PAD.l, xPx(0)); ctx.lineTo(w - PAD.r, xPx(0));
+      ctx.strokeStyle = 'rgba(138,122,101,0.6)';
+      ctx.setLineDash([4,4]); ctx.lineWidth = 1.2;
+      ctx.stroke(); ctx.setLineDash([]);
+
+      // trajectory curve
+      ctx.beginPath();
+      const steps = 160;
+      for (let i = 0; i <= steps; i++) {
+        const t = (i / steps) * state.tMax;
+        const x = heightAt(t);
+        const px = tPx(t), py = xPx(Math.max(x, -state.xMax * 0.05));
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.strokeStyle = '#4ECDC4';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // apex marker
+      const apexT = Math.min(Math.max(state.v0 / state.g, 0), state.tMax);
+      const apexX = heightAt(apexT);
+      const apexPx = tPx(apexT), apexPy = xPx(apexX);
+      ctx.beginPath(); ctx.arc(apexPx, apexPy, 4, 0, 2*Math.PI);
+      ctx.fillStyle = '#FFD166'; ctx.fill();
+
+      // current point
+      const curX = heightAt(state.t);
+      const cpx = tPx(state.t), cpy = xPx(curX);
+
+      // guide lines to axes
+      ctx.beginPath();
+      ctx.moveTo(cpx, cpy); ctx.lineTo(cpx, h - PAD.b);
+      ctx.moveTo(cpx, cpy); ctx.lineTo(PAD.l, cpy);
+      ctx.strokeStyle = 'rgba(247,131,172,0.55)';
+      ctx.setLineDash([3,3]); ctx.lineWidth = 1;
+      ctx.stroke(); ctx.setLineDash([]);
+
+      // current point glow + disc
+      const pg = ctx.createRadialGradient(cpx, cpy, 0, cpx, cpy, 14);
+      pg.addColorStop(0, 'rgba(91,141,239,0.55)');
+      pg.addColorStop(1, 'rgba(91,141,239,0)');
+      ctx.beginPath(); ctx.arc(cpx, cpy, 14, 0, 2*Math.PI);
+      ctx.fillStyle = pg; ctx.fill();
+      ctx.beginPath(); ctx.arc(cpx, cpy, 5, 0, 2*Math.PI);
+      ctx.fillStyle = '#5B8DEF'; ctx.fill();
+
+      // labels
+      ctx.fillStyle = 'rgba(255,209,102,0.9)';
+      ctx.font = `${Math.max(10, w * 0.024)}px 'DM Mono', monospace`;
+      ctx.textAlign = 'left';
+      ctx.fillText(`T flight = ${state.tMax.toFixed(2)} s`, PAD.l + 6, PAD.t + 14);
+    }
+
+    function updateReadout() {
+      const apexT = Math.max(state.v0 / state.g, 0);
+      const apexX = heightAt(Math.min(apexT, state.tMax));
+      const curX = heightAt(state.t);
+      const curV = velAt(state.t);
+      const impactV = velAt(state.tMax);
+      document.getElementById('rT').textContent    = state.tMax.toFixed(3) + ' s';
+      document.getElementById('rTa').textContent   = apexT.toFixed(3) + ' s';
+      document.getElementById('rXmax').textContent = apexX.toFixed(2) + ' m';
+      document.getElementById('rt').textContent    = state.t.toFixed(3) + ' s';
+      document.getElementById('rx').textContent    = curX.toFixed(2) + ' m';
+      document.getElementById('rv').textContent    = curV.toFixed(2) + ' m/s';
+      document.getElementById('rvi').textContent   = (-Math.abs(impactV)).toFixed(2) + ' m/s';
+    }
+
+    // ── Animation loop ──
+    let last = null;
+    function frame(ts) {
+      _simRaf = requestAnimationFrame(frame);
+      const dt = last ? Math.min((ts - last) / 1000, 0.05) : 0;
+      last = ts;
+
+      const playDuration = 1.8; // real seconds for one full flight to play out, regardless of tMax
+      state.t += dt * (state.tMax / playDuration);
+      if (state.t > state.tMax) state.t = 0;
+
+      draw();
+      updateReadout();
+    }
+    _simRaf = requestAnimationFrame(frame);
+  }
+};
+
+SIMS['bin-orb'] = {
+  title: "Binary Orbit",
+  subtitle: "Adjust the two masses M and m, the separation D, and eccentricity e — watch both bodies orbit their common center of mass.",
+
+  build(host) {
+    const state = { M: 1.4, m: 0.8, D: 1.5, e: 0.3, meanAnomaly: 0, trail1: [], trail2: [] };
+
+    host.insertAdjacentHTML('beforeend', `
+      <div class="sim-layout">
+        <div class="sim-canvas-wrap"><canvas id="bin-canvas"></canvas></div>
+        <div class="sim-panel">
+
+          <div class="sim-equation">
+            <div class="eq-label">Equation</div>
+            <div class="eq-display">$$T^2 = \\dfrac{4\\pi^2}{G(M+m)}\\,D^3$$</div>
+          </div>
+
+          <div class="sim-controls">
+            <h3>Variables</h3>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">M</span> — mass 1</span>
+                <span class="sl-val" id="lM">1.40 M☉</span>
+              </div>
+              <input type="range" id="sM" min="0.2" max="4" step="0.05" value="1.4">
+            </div>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">m</span> — mass 2</span>
+                <span class="sl-val" id="lm">0.80 M☉</span>
+              </div>
+              <input type="range" id="sm" min="0.2" max="4" step="0.05" value="0.8">
+            </div>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">D</span> — separation (semi-major axis)</span>
+                <span class="sl-val" id="lD">1.50 AU</span>
+              </div>
+              <input type="range" id="sD" min="0.3" max="3.5" step="0.05" value="1.5">
+            </div>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">e</span> — eccentricity</span>
+                <span class="sl-val" id="le">0.30</span>
+              </div>
+              <input type="range" id="se" min="0" max="0.92" step="0.01" value="0.3">
+            </div>
+          </div>
+
+          <div class="sim-readout">
+            <h3>Live Readout</h3>
+            <div class="readout-row"><span class="rkey">Period T</span><span class="rval hi" id="rT">—</span></div>
+            <div class="readout-row"><span class="rkey">Separation D (semi-major)</span><span class="rval" id="rD">—</span></div>
+            <div class="readout-row"><span class="rkey">Orbit radius a₁ (M about COM)</span><span class="rval" id="ra1">—</span></div>
+            <div class="readout-row"><span class="rkey">Orbit radius a₂ (m about COM)</span><span class="rval" id="ra2">—</span></div>
+            <div class="readout-row"><span class="rkey">Current separation r</span><span class="rval" id="rr">—</span></div>
+            <div class="readout-row"><span class="rkey">Speed v₁ (mass M)</span><span class="rval" id="rv1">—</span></div>
+            <div class="readout-row"><span class="rkey">Speed v₂ (mass m)</span><span class="rval" id="rv2">—</span></div>
+          </div>
+
+          <div class="sim-legend">
+            <h3>Legend</h3>
+            <div class="legend-row"><div class="legend-dot" style="background:#FFD166"></div>Mass M</div>
+            <div class="legend-row"><div class="legend-dot" style="background:#5B8DEF"></div>Mass m</div>
+            <div class="legend-row"><div class="legend-dot" style="background:#E6E0D4"></div>Center of mass</div>
+            <div class="legend-row"><div class="legend-line" style="border-color:#FFD166;opacity:.4"></div>Trail — M</div>
+            <div class="legend-row"><div class="legend-line" style="border-color:#5B8DEF;opacity:.4"></div>Trail — m</div>
+            <div class="legend-row"><div class="legend-line" style="border-color:#8A7A65;border-top-style:dashed"></div>Line of centers</div>
+          </div>
+        </div>
+      </div>`);
+
+    renderMath();
+
+    // ── Canvas ──
+    const canvas = document.getElementById('bin-canvas');
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+
+    function resize() {
+      const sz = canvas.parentElement.clientWidth;
+      canvas.width  = sz * dpr;
+      canvas.height = sz * dpr;
+      canvas.style.width  = sz + 'px';
+      canvas.style.height = sz + 'px';
+      ctx.resetTransform();
+      ctx.scale(dpr, dpr);
+      state.trail1 = [];
+      state.trail2 = [];
+    }
+    resize();
+    const _ro = new ResizeObserver(resize);
+    _ro.observe(canvas.parentElement);
+
+    // ── Sliders ──
+    function readSliders() {
+      state.M = parseFloat(document.getElementById('sM').value);
+      state.m = parseFloat(document.getElementById('sm').value);
+      state.D = parseFloat(document.getElementById('sD').value);
+      state.e = parseFloat(document.getElementById('se').value);
+      document.getElementById('lM').textContent = state.M.toFixed(2) + ' M☉';
+      document.getElementById('lm').textContent = state.m.toFixed(2) + ' M☉';
+      document.getElementById('lD').textContent = state.D.toFixed(2) + ' AU';
+      document.getElementById('le').textContent = state.e.toFixed(2);
+      state.trail1 = [];
+      state.trail2 = [];
+    }
+    ['sM','sm','sD','se'].forEach(id => document.getElementById(id).addEventListener('input', readSliders));
+
+    // ── Orbital math (relative orbit, then scaled to barycentric frame) ──
+    function solveE(Manom, e) {       // Newton–Raphson for eccentric anomaly
+      let E = Manom;
+      for (let i = 0; i < 12; i++) E -= (E - e * Math.sin(E) - Manom) / (1 - e * Math.cos(E));
+      return E;
+    }
+    function trueAnomaly(E, e) {
+      return 2 * Math.atan2(Math.sqrt(1 + e) * Math.sin(E / 2), Math.sqrt(1 - e) * Math.cos(E / 2));
+    }
+
+    function sz() { return canvas.width / dpr; }
+    function auPx(au) { return au * (sz() * 0.5 / 3.9); }   // scale: 3.9 AU fits canvas half-width
+
+    // relative vector r_vec (from M toward m), with the origin (COM) as its focus once scaled
+    function relVec(M_anom) {
+      const E  = solveE(M_anom, state.e);
+      const nu = trueAnomaly(E, state.e);
+      const r  = state.D * (1 - state.e * state.e) / (1 + state.e * Math.cos(nu));
+      return { rx: r * Math.cos(nu), ry: r * Math.sin(nu), r, nu };
+    }
+
+    function bodyPositions(M_anom) {
+      const rel = relVec(M_anom);
+      const total = state.M + state.m;
+      const f1 = -state.m / total;   // body M sits opposite body m through the COM
+      const f2 =  state.M / total;
+      const x1 = sz()/2 + auPx(f1 * rel.rx), y1 = sz()/2 - auPx(f1 * rel.ry);
+      const x2 = sz()/2 + auPx(f2 * rel.rx), y2 = sz()/2 - auPx(f2 * rel.ry);
+      return { x1, y1, x2, y2, r: rel.r, nu: rel.nu, f1, f2 };
+    }
+
+    function relSpeed(r) {                               // vis-viva, AU/yr
+      const GM = 4 * Math.PI * Math.PI * (state.M + state.m);
+      return Math.sqrt(Math.max(GM * (2/r - 1/state.D), 0));
+    }
+
+    // ── Draw ──
+    function draw(pos) {
+      const S = sz();
+      ctx.clearRect(0, 0, S, S);
+
+      // subtle grid
+      ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+      ctx.lineWidth = 1;
+      const step = auPx(0.5);
+      for (let x = (S/2) % step; x < S; x += step) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,S); ctx.stroke(); }
+      for (let y = (S/2) % step; y < S; y += step) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(S,y); ctx.stroke(); }
+
+      // line of centers (through COM)
+      ctx.beginPath();
+      ctx.moveTo(pos.x1, pos.y1);
+      ctx.lineTo(pos.x2, pos.y2);
+      ctx.strokeStyle = 'rgba(138,122,101,0.4)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4,4]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // trails
+      function drawTrail(trail, color) {
+        if (trail.length > 1) {
+          ctx.beginPath();
+          ctx.moveTo(trail[0].x, trail[0].y);
+          for (let i = 1; i < trail.length; i++) ctx.lineTo(trail[i].x, trail[i].y);
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 1.5;
+          ctx.lineJoin = 'round';
+          ctx.stroke();
+        }
+      }
+      drawTrail(state.trail1, 'rgba(255,209,102,0.35)');
+      drawTrail(state.trail2, 'rgba(91,141,239,0.35)');
+
+      // center of mass marker
+      ctx.beginPath();
+      ctx.moveTo(S/2 - 7, S/2); ctx.lineTo(S/2 + 7, S/2);
+      ctx.moveTo(S/2, S/2 - 7); ctx.lineTo(S/2, S/2 + 7);
+      ctx.strokeStyle = 'rgba(230,224,212,0.8)';
+      ctx.lineWidth = 1.4;
+      ctx.stroke();
+
+      // body radii scaled by mass^(1/3), clamped for visibility
+      const r1 = Math.max(7, Math.min(20, S * 0.02 * Math.cbrt(state.M)));
+      const r2 = Math.max(7, Math.min(20, S * 0.02 * Math.cbrt(state.m)));
+
+      function drawBody(x, y, radius, color, label) {
+        const g = ctx.createRadialGradient(x, y, 0, x, y, radius * 3);
+        g.addColorStop(0, color.glow);
+        g.addColorStop(1, color.transparent);
+        ctx.beginPath(); ctx.arc(x, y, radius * 3, 0, 2*Math.PI);
+        ctx.fillStyle = g; ctx.fill();
+        ctx.beginPath(); ctx.arc(x, y, radius, 0, 2*Math.PI);
+        ctx.fillStyle = color.solid; ctx.fill();
+        ctx.fillStyle = '#1A1209';
+        ctx.font = `bold ${Math.max(8, radius*0.72)}px 'DM Mono', monospace`;
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(label, x, y);
+        ctx.textBaseline = 'alphabetic';
+      }
+
+      drawBody(pos.x1, pos.y1, r1, {
+        glow: 'rgba(255,209,102,0.45)', transparent: 'rgba(255,180,60,0)', solid: '#FFD166'
+      }, 'M');
+      drawBody(pos.x2, pos.y2, r2, {
+        glow: 'rgba(91,141,239,0.5)', transparent: 'rgba(91,141,239,0)', solid: '#5B8DEF'
+      }, 'm');
+
+      // period label top-left
+      const T = Math.sqrt(Math.pow(state.D, 3) / (state.M + state.m));
+      ctx.fillStyle = 'rgba(255,209,102,0.9)';
+      ctx.font = `${Math.max(10, S*0.032)}px 'DM Mono', monospace`;
+      ctx.textAlign = 'left';
+      ctx.fillText(`T = ${T.toFixed(3)} yr`, S*0.04, S*0.07);
+
+      // separation label near line midpoint
+      ctx.fillStyle = 'rgba(138,122,101,0.9)';
+      ctx.textAlign = 'center';
+      ctx.fillText(`r = ${pos.r.toFixed(2)} AU`, (pos.x1+pos.x2)/2, (pos.y1+pos.y2)/2 - 10);
+    }
+
+    function updateReadout(pos) {
+      const T = Math.sqrt(Math.pow(state.D, 3) / (state.M + state.m));
+      const a1 = Math.abs(pos.f1) * state.D;
+      const a2 = Math.abs(pos.f2) * state.D;
+      const vRel = relSpeed(pos.r);
+      const v1 = Math.abs(pos.f1) * vRel;
+      const v2 = Math.abs(pos.f2) * vRel;
+      document.getElementById('rT').textContent  = T.toFixed(4) + ' yr';
+      document.getElementById('rD').textContent  = state.D.toFixed(3) + ' AU';
+      document.getElementById('ra1').textContent = a1.toFixed(3) + ' AU';
+      document.getElementById('ra2').textContent = a2.toFixed(3) + ' AU';
+      document.getElementById('rr').textContent  = pos.r.toFixed(3) + ' AU';
+      document.getElementById('rv1').textContent = v1.toFixed(2) + ' AU/yr';
+      document.getElementById('rv2').textContent = v2.toFixed(2) + ' AU/yr';
+    }
+
+    // ── Animation loop ──
+    let last = null;
+    function frame(ts) {
+      _simRaf = requestAnimationFrame(frame);
+      const dt = last ? Math.min((ts - last) / 1000, 0.05) : 0;
+      last = ts;
+
+      const T = Math.sqrt(Math.pow(state.D, 3) / (state.M + state.m));
+      const n = (2 * Math.PI / T) * 1.4;   // mean motion × speed factor (1.4 yr/s)
+      state.meanAnomaly = (state.meanAnomaly + n * dt) % (2 * Math.PI);
+
+      const pos = bodyPositions(state.meanAnomaly);
+      state.trail1.push({ x: pos.x1, y: pos.y1 });
+      state.trail2.push({ x: pos.x2, y: pos.y2 });
+      if (state.trail1.length > 230) state.trail1.shift();
+      if (state.trail2.length > 230) state.trail2.shift();
+
+      draw(pos);
+      updateReadout(pos);
+    }
+    _simRaf = requestAnimationFrame(frame);
+  }
+};
+
+
+SIMS['osc-x'] = {
+  title: "Simple Harmonic Motion",
+  subtitle: "Adjust amplitude A, angular frequency ω, and phase φ — watch the mass-spring oscillate and trace x(t) in real time.",
+
+  build(host) {
+    const state = { A: 1.5, omega: 2.0, phi: 0.0, t: 0, trail: [] };
+    const WINDOW = 8; // seconds of history shown in the scrolling x(t) graph
+
+    host.insertAdjacentHTML('beforeend', `
+      <div class="sim-layout">
+        <div class="sim-canvas-wrap"><canvas id="shm-canvas"></canvas></div>
+        <div class="sim-panel">
+
+          <div class="sim-equation">
+            <div class="eq-label">Equation</div>
+            <div class="eq-display">$$x(t) = A\\cos(\\omega t + \\phi)$$</div>
+          </div>
+
+          <div class="sim-controls">
+            <h3>Variables</h3>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">A</span> — amplitude</span>
+                <span class="sl-val" id="lA">1.50 m</span>
+              </div>
+              <input type="range" id="sA" min="0.2" max="3" step="0.1" value="1.5">
+            </div>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">ω</span> — angular frequency</span>
+                <span class="sl-val" id="lomega">2.00 rad/s</span>
+              </div>
+              <input type="range" id="somega" min="0.5" max="8" step="0.1" value="2">
+            </div>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">φ</span> — phase</span>
+                <span class="sl-val" id="lphi">0.00 rad</span>
+              </div>
+              <input type="range" id="sphi" min="-3.14" max="3.14" step="0.05" value="0">
+            </div>
+          </div>
+
+          <div class="sim-readout">
+            <h3>Live Readout</h3>
+            <div class="readout-row"><span class="rkey">Period T</span><span class="rval hi" id="rT">—</span></div>
+            <div class="readout-row"><span class="rkey">Frequency f</span><span class="rval" id="rf">—</span></div>
+            <div class="readout-row"><span class="rkey">Current x(t)</span><span class="rval" id="rx">—</span></div>
+            <div class="readout-row"><span class="rkey">Current velocity</span><span class="rval" id="rv">—</span></div>
+            <div class="readout-row"><span class="rkey">Current acceleration</span><span class="rval" id="ra">—</span></div>
+            <div class="readout-row"><span class="rkey">Max speed (Aω)</span><span class="rval" id="rvmax">—</span></div>
+            <div class="readout-row"><span class="rkey">Max accel (Aω²)</span><span class="rval" id="ramax">—</span></div>
+          </div>
+
+          <div class="sim-legend">
+            <h3>Legend</h3>
+            <div class="legend-row"><div class="legend-dot" style="background:#5B8DEF"></div>Oscillating mass</div>
+            <div class="legend-row"><div class="legend-line" style="border-color:#4ECDC4;opacity:.7"></div>x(t) trace</div>
+            <div class="legend-row"><div class="legend-line" style="border-color:#8A7A65;border-top-style:dashed"></div>Equilibrium (x = 0)</div>
+            <div class="legend-row"><div class="legend-line" style="border-color:#F783AC"></div>Velocity vector</div>
+          </div>
+        </div>
+      </div>`);
+
+    renderMath();
+
+    // ── Canvas ──
+    const canvas = document.getElementById('shm-canvas');
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+
+    function resize() {
+      const w = canvas.parentElement.clientWidth;
+      const h = Math.max(320, w * 0.72);
+      canvas.width  = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width  = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.resetTransform();
+      ctx.scale(dpr, dpr);
+      state.trail = [];
+    }
+    resize();
+    const _ro = new ResizeObserver(resize);
+    _ro.observe(canvas.parentElement);
+
+    // ── Sliders ──
+    function readSliders() {
+      state.A     = parseFloat(document.getElementById('sA').value);
+      state.omega = parseFloat(document.getElementById('somega').value);
+      state.phi   = parseFloat(document.getElementById('sphi').value);
+      document.getElementById('lA').textContent      = state.A.toFixed(2) + ' m';
+      document.getElementById('lomega').textContent  = state.omega.toFixed(2) + ' rad/s';
+      document.getElementById('lphi').textContent    = state.phi.toFixed(2) + ' rad';
+    }
+    ['sA','somega','sphi'].forEach(id => document.getElementById(id).addEventListener('input', readSliders));
+
+    // ── Kinematics ──
+    function xAt(t) { return state.A * Math.cos(state.omega * t + state.phi); }
+    function vAt(t) { return -state.A * state.omega * Math.sin(state.omega * t + state.phi); }
+    function aAt(t) { return -state.omega * state.omega * xAt(t); }
+
+    // ── Layout ──
+    function W() { return canvas.width / dpr; }
+    function H() { return canvas.height / dpr; }
+    function springRegionH(h) { return h * 0.4; }
+    const GPAD = { l: 58, r: 24, t: 16, b: 34 };
+
+    // ── Draw: spring-mass region ──
+    function drawSpringMass(x, v, w, hTop) {
+      const cx = w / 2;
+      const cy = hTop / 2;
+      const pxPerM = (w * 0.32) / 3.0; // fit amplitude range comfortably
+      const massX = cx + x * pxPerM;
+      const wallX = w * 0.08;
+      const massSize = 26;
+
+      // wall (hatched)
+      ctx.strokeStyle = 'rgba(230,224,212,0.5)';
+      ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(wallX, cy - 40); ctx.lineTo(wallX, cy + 40); ctx.stroke();
+      ctx.lineWidth = 1;
+      for (let i = -4; i <= 4; i++) {
+        ctx.beginPath();
+        ctx.moveTo(wallX, cy + i * 10);
+        ctx.lineTo(wallX - 8, cy + i * 10 + 8);
+        ctx.stroke();
+      }
+
+      // equilibrium dashed line
+      ctx.beginPath();
+      ctx.moveTo(cx, 10); ctx.lineTo(cx, hTop - 10);
+      ctx.strokeStyle = 'rgba(138,122,101,0.5)';
+      ctx.setLineDash([4,4]); ctx.lineWidth = 1;
+      ctx.stroke(); ctx.setLineDash([]);
+
+      // spring (zigzag from wall to mass)
+      const coils = 10;
+      const startX = wallX, endX = massX - massSize/2;
+      const span = endX - startX;
+      ctx.beginPath();
+      ctx.moveTo(startX, cy);
+      for (let i = 1; i < coils; i++) {
+        const px = startX + (span * i) / coils;
+        const py = cy + (i % 2 === 0 ? -12 : 12);
+        ctx.lineTo(px, py);
+      }
+      ctx.lineTo(endX, cy);
+      ctx.strokeStyle = 'rgba(230,224,212,0.55)';
+      ctx.lineWidth = 1.6;
+      ctx.stroke();
+
+      // mass glow + block
+      const g = ctx.createRadialGradient(massX, cy, 0, massX, cy, massSize * 1.8);
+      g.addColorStop(0, 'rgba(91,141,239,0.5)');
+      g.addColorStop(1, 'rgba(91,141,239,0)');
+      ctx.beginPath(); ctx.arc(massX, cy, massSize * 1.8, 0, 2*Math.PI);
+      ctx.fillStyle = g; ctx.fill();
+      ctx.fillStyle = '#5B8DEF';
+      ctx.fillRect(massX - massSize/2, cy - massSize/2, massSize, massSize);
+
+      // velocity vector
+      const vScale = 6;
+      const vx = v * vScale;
+      if (Math.abs(vx) > 1) {
+        const tipX = massX + vx;
+        ctx.beginPath();
+        ctx.moveTo(massX, cy - massSize * 0.9);
+        ctx.lineTo(tipX, cy - massSize * 0.9);
+        ctx.strokeStyle = 'rgba(247,131,172,0.9)';
+        ctx.lineWidth = 1.8;
+        ctx.stroke();
+        const dir = Math.sign(vx);
+        ctx.beginPath();
+        ctx.moveTo(tipX, cy - massSize * 0.9);
+        ctx.lineTo(tipX - dir*7, cy - massSize * 0.9 - 4);
+        ctx.lineTo(tipX - dir*7, cy - massSize * 0.9 + 4);
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(247,131,172,0.9)';
+        ctx.fill();
+      }
+
+      // amplitude tick marks
+      ctx.fillStyle = 'rgba(255,209,102,0.85)';
+      ctx.font = `${Math.max(10, w * 0.026)}px 'DM Mono', monospace`;
+      ctx.textAlign = 'center';
+      ctx.fillText(`x = ${x.toFixed(2)} m`, massX, cy + massSize * 1.5 + 16);
+    }
+
+    // ── Draw: scrolling x(t) graph region ──
+    function drawGraph(w, hTop, hGraph) {
+      const offY = hTop;
+      const gw = w, gh = hGraph;
+      const xMax = state.A * 1.2 || 1;
+      const tMin = Math.max(0, state.t - WINDOW);
+      const tMax = tMin + WINDOW;
+
+      function tPx(t) { return GPAD.l + ((t - tMin) / WINDOW) * (gw - GPAD.l - GPAD.r); }
+      function xPx(x) { return offY + GPAD.t + (gh - GPAD.t - GPAD.b) * 0.5 - (x / xMax) * ((gh - GPAD.t - GPAD.b) * 0.5); }
+
+      // background separator
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+      ctx.beginPath(); ctx.moveTo(0, offY); ctx.lineTo(gw, offY); ctx.stroke();
+
+      // grid
+      ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 8; i++) {
+        const t = tMin + (i/8) * WINDOW;
+        const px = tPx(t);
+        ctx.beginPath(); ctx.moveTo(px, offY + GPAD.t); ctx.lineTo(px, offY + gh - GPAD.b); ctx.stroke();
+      }
+      for (let i = -2; i <= 2; i++) {
+        const x = (i/2) * xMax;
+        const py = xPx(x);
+        ctx.beginPath(); ctx.moveTo(GPAD.l, py); ctx.lineTo(gw - GPAD.r, py); ctx.stroke();
+      }
+
+      // axes
+      ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(GPAD.l, offY + GPAD.t); ctx.lineTo(GPAD.l, offY + gh - GPAD.b);
+      ctx.lineTo(gw - GPAD.r, offY + gh - GPAD.b);
+      ctx.stroke();
+
+      // equilibrium line
+      ctx.beginPath();
+      ctx.moveTo(GPAD.l, xPx(0)); ctx.lineTo(gw - GPAD.r, xPx(0));
+      ctx.strokeStyle = 'rgba(138,122,101,0.6)';
+      ctx.setLineDash([4,4]); ctx.lineWidth = 1;
+      ctx.stroke(); ctx.setLineDash([]);
+
+      // tick labels
+      ctx.fillStyle = 'rgba(230,224,212,0.7)';
+      ctx.font = `${Math.max(9, gw * 0.02)}px 'DM Mono', monospace`;
+      ctx.textAlign = 'center';
+      for (let i = 0; i <= 4; i++) {
+        const t = tMin + (i/4) * WINDOW;
+        ctx.fillText(t.toFixed(1) + 's', tPx(t), offY + gh - GPAD.b + 16);
+      }
+      ctx.textAlign = 'right';
+      ctx.fillText(xMax.toFixed(1)+'m', GPAD.l - 8, xPx(xMax) + 3);
+      ctx.fillText((-xMax).toFixed(1)+'m', GPAD.l - 8, xPx(-xMax) + 3);
+
+      // trace
+      const visible = state.trail.filter(p => p.t >= tMin);
+      if (visible.length > 1) {
+        ctx.beginPath();
+        visible.forEach((p, i) => {
+          const px = tPx(p.t), py = xPx(p.x);
+          if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        });
+        ctx.strokeStyle = '#4ECDC4';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+      // current point marker
+      const curX = xAt(state.t);
+      const cpx = tPx(state.t), cpy = xPx(curX);
+      ctx.beginPath(); ctx.arc(cpx, cpy, 4.5, 0, 2*Math.PI);
+      ctx.fillStyle = '#5B8DEF'; ctx.fill();
+    }
+
+    function updateReadout() {
+      const T = 2 * Math.PI / state.omega;
+      const f = state.omega / (2 * Math.PI);
+      const x = xAt(state.t), v = vAt(state.t), a = aAt(state.t);
+      document.getElementById('rT').textContent    = T.toFixed(3) + ' s';
+      document.getElementById('rf').textContent    = f.toFixed(3) + ' Hz';
+      document.getElementById('rx').textContent    = x.toFixed(3) + ' m';
+      document.getElementById('rv').textContent    = v.toFixed(3) + ' m/s';
+      document.getElementById('ra').textContent    = a.toFixed(3) + ' m/s²';
+      document.getElementById('rvmax').textContent = (state.A * state.omega).toFixed(3) + ' m/s';
+      document.getElementById('ramax').textContent = (state.A * state.omega * state.omega).toFixed(3) + ' m/s²';
+    }
+
+    // ── Animation loop ──
+    let last = null;
+    function frame(ts) {
+      _simRaf = requestAnimationFrame(frame);
+      const dt = last ? Math.min((ts - last) / 1000, 0.05) : 0;
+      last = ts;
+
+      state.t += dt; // real time, since ω is already in rad/s
+
+      const x = xAt(state.t);
+      state.trail.push({ t: state.t, x });
+      const cutoff = state.t - WINDOW - 1;
+      while (state.trail.length && state.trail[0].t < cutoff) state.trail.shift();
+
+      const w = W(), h = H();
+      const hTop = springRegionH(h);
+      const hGraph = h - hTop;
+
+      ctx.clearRect(0, 0, w, h);
+      drawSpringMass(x, vAt(state.t), w, hTop);
+      drawGraph(w, hTop, hGraph);
+      updateReadout();
+    }
+    _simRaf = requestAnimationFrame(frame);
+  }
+};
+
+
+SIMS['kin-centrip'] = {
+  title: "Centripetal Acceleration",
+  subtitle: "Adjust the radius r and angular velocity ω — watch the tangential velocity and inward centripetal acceleration update in real time.",
+
+  build(host) {
+    const state = { r: 1.5, omega: 2.0, v: 3.0, theta: 0, trail: [], lock: 'none' };
+
+    host.insertAdjacentHTML('beforeend', `
+      <div class="sim-layout">
+        <div class="sim-canvas-wrap"><canvas id="cent-canvas"></canvas></div>
+        <div class="sim-panel">
+
+          <div class="sim-equation">
+            <div class="eq-label">Equation</div>
+            <div class="eq-display">$$a_c = \\dfrac{v^2}{r} = r\\omega^2$$</div>
+          </div>
+
+          <div class="sim-controls">
+            <h3>Variables</h3>
+            <style>
+              .cent-lock-row { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+              .cent-lock-btn {
+                background: rgba(255,255,255,0.05);
+                border: 1px solid rgba(255,255,255,0.15);
+                color: rgba(230,224,212,0.75);
+                border-radius: 6px;
+                padding: 5px 10px;
+                font-size: 0.78rem;
+                font-family: 'DM Mono', monospace;
+                cursor: pointer;
+                transition: all .15s ease;
+              }
+              .cent-lock-btn:hover { border-color: rgba(255,209,102,0.5); }
+              .cent-lock-btn.active {
+                background: rgba(255,209,102,0.18);
+                border-color: #FFD166;
+                color: #FFD166;
+              }
+              .sim-slider-group input[disabled] { opacity: 0.35; cursor: not-allowed; }
+            </style>
+            <div class="cent-lock-row">
+              <button type="button" class="cent-lock-btn active" data-lock="none">Free</button>
+              <button type="button" class="cent-lock-btn" data-lock="r">Fix r</button>
+              <button type="button" class="cent-lock-btn" data-lock="omega">Fix ω</button>
+              <button type="button" class="cent-lock-btn" data-lock="v">Fix v</button>
+            </div>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">r</span> — radius</span>
+                <span class="sl-val" id="lr">1.50 m</span>
+              </div>
+              <input type="range" id="sr" min="0.5" max="4" step="0.05" value="1.5">
+            </div>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">ω</span> — angular velocity</span>
+                <span class="sl-val" id="lomega">2.00 rad/s</span>
+              </div>
+              <input type="range" id="somega" min="0.2" max="6" step="0.1" value="2">
+            </div>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">v</span> — tangential speed</span>
+                <span class="sl-val" id="lv">3.00 m/s</span>
+              </div>
+              <input type="range" id="sv" min="0.1" max="25" step="0.1" value="3">
+            </div>
+          </div>
+
+          <div class="sim-readout">
+            <h3>Live Readout</h3>
+            <div class="readout-row"><span class="rkey">Centripetal accel. a_c</span><span class="rval hi" id="rac">—</span></div>
+            <div class="readout-row"><span class="rkey">Tangential speed v</span><span class="rval" id="rv">—</span></div>
+            <div class="readout-row"><span class="rkey">Radius r</span><span class="rval" id="rr">—</span></div>
+            <div class="readout-row"><span class="rkey">Period T</span><span class="rval" id="rT">—</span></div>
+            <div class="readout-row"><span class="rkey">Frequency f</span><span class="rval" id="rf">—</span></div>
+          </div>
+
+          <div class="sim-legend">
+            <h3>Legend</h3>
+            <div class="legend-row"><div class="legend-dot" style="background:#5B8DEF"></div>Orbiting object</div>
+            <div class="legend-row"><div class="legend-line" style="border-color:#4ECDC4;opacity:.6"></div>Circular path</div>
+            <div class="legend-row"><div class="legend-line" style="border-color:#8A7A65;border-top-style:dashed"></div>Radius r</div>
+            <div class="legend-row"><div class="legend-line" style="border-color:#FFD166"></div>Velocity v (tangential)</div>
+            <div class="legend-row"><div class="legend-line" style="border-color:#F783AC"></div>Acceleration a_c (inward)</div>
+          </div>
+        </div>
+      </div>`);
+
+    renderMath();
+
+    // ── Canvas ──
+    const canvas = document.getElementById('cent-canvas');
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+
+    function resize() {
+      const sz = canvas.parentElement.clientWidth;
+      canvas.width  = sz * dpr;
+      canvas.height = sz * dpr;
+      canvas.style.width  = sz + 'px';
+      canvas.style.height = sz + 'px';
+      ctx.resetTransform();
+      ctx.scale(dpr, dpr);
+      state.trail = [];
+    }
+    resize();
+    const _ro = new ResizeObserver(resize);
+    _ro.observe(canvas.parentElement);
+
+    // ── Sliders ──
+    // r, ω, and v are linked by v = rω, so only two are ever truly independent.
+    // Lock mode picks which variable stays fixed. Dragging one of the other two
+    // recomputes the third; if that push would go out of range, it's clamped
+    // and the slider you just dragged snaps back instead — so the locked
+    // variable is always the one that never moves.
+    const RANGE = { r: [0.5, 4], omega: [0.2, 6], v: [0.1, 25] };
+    const SLIDER_ID = { r: 'sr', omega: 'somega', v: 'sv' };
+
+    function clampVar(key, val) {
+      const [lo, hi] = RANGE[key];
+      return Math.min(Math.max(val, lo), hi);
+    }
+    function solveFor(target) {
+      if (target === 'v')      state.v     = state.r * state.omega;
+      else if (target === 'omega') state.omega = state.v / state.r;
+      else if (target === 'r')     state.r     = state.v / state.omega;
+    }
+
+    function refreshLabels() {
+      const lockMark = key => state.lock === key ? '🔒 ' : '';
+      document.getElementById('lr').textContent     = lockMark('r')     + state.r.toFixed(2) + ' m';
+      document.getElementById('lomega').textContent = lockMark('omega') + state.omega.toFixed(2) + ' rad/s';
+      document.getElementById('lv').textContent     = lockMark('v')     + state.v.toFixed(2) + ' m/s';
+      document.getElementById('sr').value     = state.r;
+      document.getElementById('somega').value = state.omega;
+      document.getElementById('sv').value     = state.v;
+    }
+
+    function applyLockUI() {
+      Object.keys(SLIDER_ID).forEach(key => {
+        document.getElementById(SLIDER_ID[key]).disabled = (state.lock === key);
+      });
+      document.querySelectorAll('.cent-lock-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lock === state.lock);
+      });
+    }
+
+    function applySync(draggedKey) {
+      state[draggedKey] = parseFloat(document.getElementById(SLIDER_ID[draggedKey]).value);
+
+      if (state.lock === 'none') {
+        if (draggedKey === 'v') {
+          state.omega = clampVar('omega', state.v / state.r);   // r acts as the default anchor
+          solveFor('v');                                         // resnap v to the achievable value
+        } else {
+          solveFor('v');
+        }
+      } else if (state.lock !== draggedKey) {
+        const otherKey = ['r', 'omega', 'v'].find(k => k !== state.lock && k !== draggedKey);
+        solveFor(otherKey);
+        const clamped = clampVar(otherKey, state[otherKey]);
+        if (clamped !== state[otherKey]) {
+          state[otherKey] = clamped;
+          solveFor(draggedKey);   // snap the dragged value back, keep the locked one exact
+        }
+      }
+
+      refreshLabels();
+      state.trail = [];
+    }
+
+    document.getElementById('sr').addEventListener('input', () => applySync('r'));
+    document.getElementById('somega').addEventListener('input', () => applySync('omega'));
+    document.getElementById('sv').addEventListener('input', () => applySync('v'));
+
+    document.querySelectorAll('.cent-lock-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.lock = btn.dataset.lock;
+        applyLockUI();
+        refreshLabels();
+      });
+    });
+    applyLockUI();
+
+    // ── Geometry ──
+    function sz() { return canvas.width / dpr; }
+    function mPx(m) { return m * (sz() * 0.5 / 4.6); }   // scale: 4.6 m fits canvas half-width
+
+    function objectPos(theta) {
+      const x = sz()/2 + mPx(state.r) * Math.cos(theta);
+      const y = sz()/2 - mPx(state.r) * Math.sin(theta);
+      return { x, y, theta };
+    }
+
+    function speed()   { return state.v; }
+    function accel()   { return state.r * state.omega * state.omega; }
+
+    // ── Draw ──
+    function draw(pos) {
+      const S = sz();
+      ctx.clearRect(0, 0, S, S);
+
+      // subtle grid
+      ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+      ctx.lineWidth = 1;
+      const step = mPx(0.5);
+      for (let x = (S/2) % step; x < S; x += step) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,S); ctx.stroke(); }
+      for (let y = (S/2) % step; y < S; y += step) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(S,y); ctx.stroke(); }
+
+      // circular path
+      ctx.beginPath();
+      ctx.arc(S/2, S/2, mPx(state.r), 0, 2*Math.PI);
+      ctx.strokeStyle = 'rgba(78,205,196,0.35)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // radius line
+      ctx.beginPath();
+      ctx.moveTo(S/2, S/2);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.strokeStyle = 'rgba(138,122,101,0.55)';
+      ctx.setLineDash([4,4]); ctx.lineWidth = 1;
+      ctx.stroke(); ctx.setLineDash([]);
+      const rmx = (S/2 + pos.x)/2, rmy = (S/2 + pos.y)/2;
+      ctx.fillStyle = 'rgba(138,122,101,0.9)';
+      ctx.font = `${Math.max(10, S*0.032)}px 'DM Mono', monospace`;
+      ctx.textAlign = 'center';
+      ctx.fillText('r', rmx, rmy - 7);
+
+      // trail
+      if (state.trail.length > 1) {
+        ctx.beginPath();
+        ctx.moveTo(state.trail[0].x, state.trail[0].y);
+        for (let i = 1; i < state.trail.length; i++) ctx.lineTo(state.trail[i].x, state.trail[i].y);
+        ctx.strokeStyle = 'rgba(91,141,239,0.3)';
+        ctx.lineWidth = 1.5;
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+      }
+
+      // center marker
+      ctx.beginPath();
+      ctx.moveTo(S/2 - 7, S/2); ctx.lineTo(S/2 + 7, S/2);
+      ctx.moveTo(S/2, S/2 - 7); ctx.lineTo(S/2, S/2 + 7);
+      ctx.strokeStyle = 'rgba(230,224,212,0.7)';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      // object glow + disc
+      const objR = Math.max(6, S * 0.02);
+      const g = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, objR*3);
+      g.addColorStop(0, 'rgba(91,141,239,0.55)');
+      g.addColorStop(1, 'rgba(91,141,239,0)');
+      ctx.beginPath(); ctx.arc(pos.x, pos.y, objR*3, 0, 2*Math.PI);
+      ctx.fillStyle = g; ctx.fill();
+      ctx.beginPath(); ctx.arc(pos.x, pos.y, objR, 0, 2*Math.PI);
+      ctx.fillStyle = '#5B8DEF'; ctx.fill();
+
+      // velocity vector (tangential, gold)
+      const v = speed();
+      const vScale = Math.max(18, S * 0.09);
+      const vAng = pos.theta + Math.PI/2;
+      const vtx = pos.x + Math.cos(vAng) * vScale;
+      const vty = pos.y - Math.sin(vAng) * vScale;
+      drawArrow(pos.x, pos.y, vtx, vty, '#FFD166');
+      ctx.fillStyle = 'rgba(255,209,102,0.9)';
+      ctx.textAlign = 'center';
+      ctx.fillText(`v = ${v.toFixed(2)} m/s`, vtx + Math.cos(vAng)*20, vty - Math.sin(vAng)*20);
+
+      // acceleration vector (centripetal, inward, pink)
+      const aScale = Math.max(16, S * 0.08);
+      const aAngRad = pos.theta + Math.PI; // points toward center
+      const atx = pos.x + Math.cos(aAngRad) * aScale;
+      const aty = pos.y - Math.sin(aAngRad) * aScale;
+      drawArrow(pos.x, pos.y, atx, aty, '#F783AC');
+      ctx.fillStyle = 'rgba(247,131,172,0.9)';
+      ctx.fillText(`a_c = ${accel().toFixed(2)} m/s²`, atx + Math.cos(aAngRad)*22, aty - Math.sin(aAngRad)*22 - 6);
+
+      // period label top-left
+      const T = 2 * Math.PI / state.omega;
+      ctx.fillStyle = 'rgba(78,205,196,0.9)';
+      ctx.textAlign = 'left';
+      ctx.fillText(`T = ${T.toFixed(3)} s`, S*0.04, S*0.07);
+    }
+
+    function drawArrow(x0, y0, x1, y1, color) {
+      const ang = Math.atan2(y1 - y0, x1 - x0);
+      const hl = 7;
+      ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1);
+      ctx.strokeStyle = color; ctx.lineWidth = 1.8; ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x1 - hl*Math.cos(ang-0.42), y1 - hl*Math.sin(ang-0.42));
+      ctx.lineTo(x1 - hl*Math.cos(ang+0.42), y1 - hl*Math.sin(ang+0.42));
+      ctx.closePath(); ctx.fillStyle = color; ctx.fill();
+    }
+
+    function updateReadout() {
+      const T = 2 * Math.PI / state.omega;
+      const f = state.omega / (2 * Math.PI);
+      document.getElementById('rac').textContent = accel().toFixed(3) + ' m/s²';
+      document.getElementById('rv').textContent  = speed().toFixed(3) + ' m/s';
+      document.getElementById('rr').textContent  = state.r.toFixed(3) + ' m';
+      document.getElementById('rT').textContent  = T.toFixed(3) + ' s';
+      document.getElementById('rf').textContent  = f.toFixed(3) + ' Hz';
+    }
+
+    // ── Animation loop ──
+    let last = null;
+    function frame(ts) {
+      _simRaf = requestAnimationFrame(frame);
+      const dt = last ? Math.min((ts - last) / 1000, 0.05) : 0;
+      last = ts;
+
+      state.theta = (state.theta + state.omega * dt) % (2 * Math.PI);
+
+      const pos = objectPos(state.theta);
+      state.trail.push({ x: pos.x, y: pos.y });
+      if (state.trail.length > 230) state.trail.shift();
+
+      draw(pos);
+      updateReadout();
+    }
+    _simRaf = requestAnimationFrame(frame);
+  }
+};
+
+
+SIMS['dyn-buo'] = {
+  title: "Buoyancy Force",
+  subtitle: "Adjust fluid density ρ, gravity g, and submerged volume V — watch the buoyant force and the object's submersion depth change.",
+
+  build(host) {
+    const state = { rho: 1000, g: 9.8, V: 0.6, time: 0 };
+    const OBJ_H = 2.2;     // object's total physical height (m)
+    const OBJ_W = 1.0;     // object's physical width (m) — fixed at 1 m so submerged
+                           // depth (m) numerically equals V (m³) for a 1 m² cross-section
+    const TANK_H = 4.6;    // tank physical height (m)
+    const TANK_W = 2.6;    // tank physical width (m)
+    const WATERLINE_FROM_BOTTOM = 2.3; // m
+
+    host.insertAdjacentHTML('beforeend', `
+      <div class="sim-layout">
+        <div class="sim-canvas-wrap"><canvas id="buoy-canvas"></canvas></div>
+        <div class="sim-panel">
+
+          <div class="sim-equation">
+            <div class="eq-label">Equation</div>
+            <div class="eq-display">$$F_B = \\rho g V$$</div>
+            <div style="font-size:0.75rem;opacity:0.6;margin-top:6px;">
+              Object cross-section fixed at 1 m², so submerged depth (m) ≈ V (m³).
+            </div>
+          </div>
+
+          <div class="sim-controls">
+            <h3>Variables</h3>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">ρ</span> — fluid density</span>
+                <span class="sl-val" id="lrho">1000 kg/m³</span>
+              </div>
+              <input type="range" id="srho" min="500" max="2000" step="10" value="1000">
+            </div>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">g</span> — gravity</span>
+                <span class="sl-val" id="lg">9.80 m/s²</span>
+              </div>
+              <input type="range" id="sg" min="1" max="20" step="0.1" value="9.8">
+            </div>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">V</span> — submerged volume</span>
+                <span class="sl-val" id="lV">0.60 m³</span>
+              </div>
+              <input type="range" id="sV" min="0" max="2" step="0.05" value="0.6">
+            </div>
+          </div>
+
+          <div class="sim-readout">
+            <h3>Live Readout</h3>
+            <div class="readout-row"><span class="rkey">Buoyant force F_B</span><span class="rval hi" id="rFB">—</span></div>
+            <div class="readout-row"><span class="rkey">Fluid density ρ</span><span class="rval" id="rrho">—</span></div>
+            <div class="readout-row"><span class="rkey">Gravity g</span><span class="rval" id="rg">—</span></div>
+            <div class="readout-row"><span class="rkey">Submerged volume V</span><span class="rval" id="rV">—</span></div>
+            <div class="readout-row"><span class="rkey">Displaced fluid mass (ρV)</span><span class="rval" id="rmass">—</span></div>
+          </div>
+
+          <div class="sim-legend">
+            <h3>Legend</h3>
+            <div class="legend-row"><div class="legend-dot" style="background:#3E7CB1"></div>Fluid</div>
+            <div class="legend-row"><div class="legend-dot" style="background:#D9B382"></div>Object</div>
+            <div class="legend-row"><div class="legend-line" style="border-color:#8A7A65;border-top-style:dashed"></div>Waterline</div>
+            <div class="legend-row"><div class="legend-line" style="border-color:#F783AC"></div>Buoyant force F_B</div>
+          </div>
+        </div>
+      </div>`);
+
+    renderMath();
+
+    // ── Canvas ──
+    const canvas = document.getElementById('buoy-canvas');
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+
+    function resize() {
+      const sz = canvas.parentElement.clientWidth;
+      canvas.width  = sz * dpr;
+      canvas.height = sz * dpr;
+      canvas.style.width  = sz + 'px';
+      canvas.style.height = sz + 'px';
+      ctx.resetTransform();
+      ctx.scale(dpr, dpr);
+    }
+    resize();
+    const _ro = new ResizeObserver(resize);
+    _ro.observe(canvas.parentElement);
+
+    // ── Sliders ──
+    function readSliders() {
+      state.rho = parseFloat(document.getElementById('srho').value);
+      state.g   = parseFloat(document.getElementById('sg').value);
+      state.V   = parseFloat(document.getElementById('sV').value);
+      document.getElementById('lrho').textContent = state.rho.toFixed(0) + ' kg/m³';
+      document.getElementById('lg').textContent   = state.g.toFixed(2) + ' m/s²';
+      document.getElementById('lV').textContent   = state.V.toFixed(2) + ' m³';
+    }
+    ['srho','sg','sV'].forEach(id => document.getElementById(id).addEventListener('input', readSliders));
+
+    // ── Physics ──
+    function buoyantForce() { return state.rho * state.g * state.V; }
+
+    // ── Geometry ──
+    function sz() { return canvas.width / dpr; }
+
+    function draw() {
+      const S = sz();
+      ctx.clearRect(0, 0, S, S);
+
+      const yTop = S * 0.08, yBottom = S * 0.92;
+      const pxPerM = (yBottom - yTop) / TANK_H;
+      const xLeft  = S/2 - (TANK_W/2) * pxPerM;
+      const xRight = S/2 + (TANK_W/2) * pxPerM;
+      const yWaterBase = yBottom - WATERLINE_FROM_BOTTOM * pxPerM;
+
+      // gentle ripple offset for the water surface
+      const rippleAmp = 2.5;
+      function waterY(x) {
+        return yWaterBase + Math.sin(x * 0.045 + state.time * 1.6) * rippleAmp;
+      }
+
+      // subtle grid
+      ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+      ctx.lineWidth = 1;
+      const step = pxPerM * 0.5;
+      for (let x = xLeft; x < xRight; x += step) { ctx.beginPath(); ctx.moveTo(x, yTop); ctx.lineTo(x, yBottom); ctx.stroke(); }
+
+      // fluid fill (below rippled waterline)
+      ctx.beginPath();
+      ctx.moveTo(xLeft, yBottom);
+      ctx.lineTo(xLeft, waterY(xLeft));
+      for (let x = xLeft; x <= xRight; x += 4) ctx.lineTo(x, waterY(x));
+      ctx.lineTo(xRight, yBottom);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(62,124,177,0.35)';
+      ctx.fill();
+
+      // tank walls
+      ctx.strokeStyle = 'rgba(230,224,212,0.4)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(xLeft, yTop); ctx.lineTo(xLeft, yBottom);
+      ctx.lineTo(xRight, yBottom); ctx.lineTo(xRight, yTop);
+      ctx.stroke();
+
+      // object geometry
+      const submergedM = Math.min(Math.max(state.V, 0), OBJ_H);
+      const freeboardM = OBJ_H - submergedM;
+      const objTopY    = yWaterBase - freeboardM * pxPerM;
+      const objBottomY = yWaterBase + submergedM * pxPerM;
+      const objHalfW   = (OBJ_W / 2) * pxPerM;
+      const objX0 = S/2 - objHalfW, objX1 = S/2 + objHalfW;
+
+      // object body
+      ctx.fillStyle = '#D9B382';
+      ctx.fillRect(objX0, objTopY, objX1 - objX0, objBottomY - objTopY);
+      ctx.strokeStyle = 'rgba(20,15,10,0.4)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(objX0, objTopY, objX1 - objX0, objBottomY - objTopY);
+
+      // underwater tint on the submerged portion of the object
+      if (submergedM > 0) {
+        ctx.fillStyle = 'rgba(62,124,177,0.3)';
+        ctx.fillRect(objX0, yWaterBase, objX1 - objX0, objBottomY - yWaterBase);
+      }
+
+      // rippled waterline drawn on top, crossing in front of object and fluid alike
+      ctx.beginPath();
+      ctx.moveTo(xLeft, waterY(xLeft));
+      for (let x = xLeft; x <= xRight; x += 4) ctx.lineTo(x, waterY(x));
+      ctx.strokeStyle = 'rgba(138,122,101,0.7)';
+      ctx.setLineDash([4,4]); ctx.lineWidth = 1.2;
+      ctx.stroke(); ctx.setLineDash([]);
+
+      // buoyant force arrow, from centroid of submerged volume, pointing up
+      const FB = buoyantForce();
+      const centroidY = submergedM > 0 ? (yWaterBase + objBottomY) / 2 : yWaterBase;
+      const maxArrow = S * 0.26;
+      const maxFB = 2000 * 20 * 2; // slider maxima product, for log-scaled arrow length
+      const arrowLen = Math.max(6, maxArrow * (Math.log10(FB + 1) / Math.log10(maxFB + 1)));
+      drawArrow(S/2, centroidY, S/2, centroidY - arrowLen, '#F783AC');
+      ctx.fillStyle = 'rgba(247,131,172,0.9)';
+      ctx.font = `${Math.max(10, S*0.03)}px 'DM Mono', monospace`;
+      ctx.textAlign = 'center';
+      ctx.fillText(`F_B = ${FB.toFixed(0)} N`, S/2, centroidY - arrowLen - 10);
+
+      // top-left summary label
+      ctx.fillStyle = 'rgba(62,124,177,0.9)';
+      ctx.textAlign = 'left';
+      ctx.fillText(`ρ = ${state.rho.toFixed(0)} kg/m³   V = ${state.V.toFixed(2)} m³`, S*0.04, S*0.07);
+    }
+
+    function drawArrow(x0, y0, x1, y1, color) {
+      const ang = Math.atan2(y1 - y0, x1 - x0);
+      const hl = 8;
+      ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1);
+      ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x1 - hl*Math.cos(ang-0.42), y1 - hl*Math.sin(ang-0.42));
+      ctx.lineTo(x1 - hl*Math.cos(ang+0.42), y1 - hl*Math.sin(ang+0.42));
+      ctx.closePath(); ctx.fillStyle = color; ctx.fill();
+    }
+
+    function updateReadout() {
+      const FB = buoyantForce();
+      document.getElementById('rFB').textContent   = FB.toFixed(2) + ' N';
+      document.getElementById('rrho').textContent  = state.rho.toFixed(0) + ' kg/m³';
+      document.getElementById('rg').textContent    = state.g.toFixed(2) + ' m/s²';
+      document.getElementById('rV').textContent    = state.V.toFixed(3) + ' m³';
+      document.getElementById('rmass').textContent = (state.rho * state.V).toFixed(2) + ' kg';
+    }
+
+    // ── Animation loop (idle ripple only — no dynamics in this equation) ──
+    let last = null;
+    function frame(ts) {
+      _simRaf = requestAnimationFrame(frame);
+      const dt = last ? Math.min((ts - last) / 1000, 0.05) : 0;
+      last = ts;
+      state.time += dt;
+
+      draw();
+      updateReadout();
+    }
+    _simRaf = requestAnimationFrame(frame);
+  }
+};
+
+
+SIMS['grav-hill'] = {
+  title: "Hill Sphere Radius",
+  subtitle: "Adjust orbital separation a, central mass M, and orbiting mass m — watch the Hill sphere (region of gravitational dominance) resize around the smaller body.",
+
+  build(host) {
+    // m is entered in Earth masses for realistic sliders; M is in solar masses.
+    // Both are converted to the same units (solar masses) before applying the formula.
+    const EARTH_TO_SOLAR = 3.003e-6;
+    const state = { a: 1.5, M: 1.0, mEarth: 1.0, moonAngle: 0 };
+
+    host.insertAdjacentHTML('beforeend', `
+      <div class="sim-layout">
+        <div class="sim-canvas-wrap"><canvas id="hill-canvas"></canvas></div>
+        <div class="sim-panel">
+
+          <div class="sim-equation">
+            <div class="eq-label">Equation</div>
+            <div class="eq-display">$$r_H \\approx a\\left(\\dfrac{m}{3M}\\right)^{1/3}$$</div>
+          </div>
+
+          <div class="sim-controls">
+            <h3>Variables</h3>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">a</span> — orbital separation</span>
+                <span class="sl-val" id="la">1.50 AU</span>
+              </div>
+              <input type="range" id="sa" min="0.3" max="5" step="0.05" value="1.5">
+            </div>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">M</span> — central mass</span>
+                <span class="sl-val" id="lM">1.00 M☉</span>
+              </div>
+              <input type="range" id="sM" min="0.2" max="3" step="0.05" value="1">
+            </div>
+            <div class="sim-slider-group">
+              <div class="sl-header">
+                <span class="sl-name"><span class="sl-sym">m</span> — orbiting mass</span>
+                <span class="sl-val" id="lm">1.00 M⊕</span>
+              </div>
+              <input type="range" id="sm" min="0.1" max="320" step="0.5" value="1">
+            </div>
+          </div>
+
+          <div class="sim-readout">
+            <h3>Live Readout</h3>
+            <div class="readout-row"><span class="rkey">Hill radius r_H</span><span class="rval hi" id="rH">—</span></div>
+            <div class="readout-row"><span class="rkey">r_H as % of a</span><span class="rval" id="rPct">—</span></div>
+            <div class="readout-row"><span class="rkey">Separation a</span><span class="rval" id="ra">—</span></div>
+            <div class="readout-row"><span class="rkey">Central mass M</span><span class="rval" id="rM">—</span></div>
+            <div class="readout-row"><span class="rkey">Orbiting mass m</span><span class="rval" id="rm">—</span></div>
+          </div>
+
+          <div class="sim-legend">
+            <h3>Legend</h3>
+            <div class="legend-row"><div class="legend-dot" style="background:#FFD166"></div>Central body (M)</div>
+            <div class="legend-row"><div class="legend-dot" style="background:#5B8DEF"></div>Orbiting body (m)</div>
+            <div class="legend-row"><div class="legend-line" style="border-color:#4ECDC4;border-top-style:dashed"></div>Hill sphere boundary</div>
+            <div class="legend-row"><div class="legend-dot" style="background:#E6E0D4"></div>Test moon (bound orbit)</div>
+          </div>
+        </div>
+      </div>`);
+
+    renderMath();
+
+    // ── Canvas ──
+    const canvas = document.getElementById('hill-canvas');
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+
+    function resize() {
+      const w = canvas.parentElement.clientWidth;
+      const h = Math.max(320, w * 0.72);
+      canvas.width  = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width  = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.resetTransform();
+      ctx.scale(dpr, dpr);
+    }
+    resize();
+    const _ro = new ResizeObserver(resize);
+    _ro.observe(canvas.parentElement);
+
+    // ── Sliders ──
+    function readSliders() {
+      state.a      = parseFloat(document.getElementById('sa').value);
+      state.M      = parseFloat(document.getElementById('sM').value);
+      state.mEarth = parseFloat(document.getElementById('sm').value);
+      document.getElementById('la').textContent = state.a.toFixed(2) + ' AU';
+      document.getElementById('lM').textContent = state.M.toFixed(2) + ' M☉';
+      document.getElementById('lm').textContent = state.mEarth.toFixed(2) + ' M⊕';
+    }
+    ['sa','sM','sm'].forEach(id => document.getElementById(id).addEventListener('input', readSliders));
+
+    // ── Physics ──
+    function hillRadius() {
+      const mSolar = state.mEarth * EARTH_TO_SOLAR;
+      return state.a * Math.cbrt(mSolar / (3 * state.M));   // AU
+    }
+
+    // Fixed reference scale so the Hill sphere circle actually grows/shrinks
+    // on screen as the variables change, rather than always auto-filling the
+    // panel. Calibrated once from the default slider values, then reused for
+    // every frame; only clamped at the extremes so it never fully vanishes
+    // or blows past the panel edges.
+    const REF_ZOOM_PANEL_FRACTION = 0.30; // default r_H fills ~30% of the panel's half-size
+    let pxPerAU_zoom = null; // set on first draw once panel size is known
+
+    // ── Layout: top = system overview, bottom = zoomed Hill sphere ──
+    function W() { return canvas.width / dpr; }
+    function H() { return canvas.height / dpr; }
+    function topH(h) { return h * 0.36; }
+
+    function drawOverview(w, hTop) {
+      const cy = hTop / 2;
+      const starX = w * 0.14;
+      const pxPerAU = (w * 0.62) / 5.0; // fit a up to slider max (5 AU) with margin
+      const planetX = starX + state.a * pxPerAU;
+
+      // orbit line
+      ctx.beginPath();
+      ctx.moveTo(starX, cy); ctx.lineTo(w * 0.86, cy);
+      ctx.strokeStyle = 'rgba(78,205,196,0.25)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // separation dashed marker + label
+      ctx.beginPath();
+      ctx.moveTo(starX, cy); ctx.lineTo(planetX, cy);
+      ctx.strokeStyle = 'rgba(138,122,101,0.6)';
+      ctx.setLineDash([4,4]); ctx.lineWidth = 1;
+      ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = 'rgba(138,122,101,0.9)';
+      ctx.font = `${Math.max(10, w * 0.022)}px 'DM Mono', monospace`;
+      ctx.textAlign = 'center';
+      ctx.fillText('a', (starX + planetX) / 2, cy - 10);
+
+      // star glow + disc
+      const starR = Math.max(10, w * 0.02) * Math.cbrt(state.M);
+      const sg = ctx.createRadialGradient(starX, cy, 0, starX, cy, starR * 3);
+      sg.addColorStop(0, 'rgba(255,209,102,0.5)');
+      sg.addColorStop(1, 'rgba(255,180,60,0)');
+      ctx.beginPath(); ctx.arc(starX, cy, starR * 3, 0, 2*Math.PI);
+      ctx.fillStyle = sg; ctx.fill();
+      ctx.beginPath(); ctx.arc(starX, cy, starR, 0, 2*Math.PI);
+      ctx.fillStyle = '#FFD166'; ctx.fill();
+
+      // planet marker (small, since it's the zoomed panel that matters)
+      const planetR = Math.max(4, starR * 0.28);
+      ctx.beginPath(); ctx.arc(planetX, cy, planetR, 0, 2*Math.PI);
+      ctx.fillStyle = '#5B8DEF'; ctx.fill();
+
+      // zoom callout box around planet, connecting to the panel below
+      const boxR = Math.max(planetR + 6, 12);
+      ctx.beginPath();
+      ctx.arc(planetX, cy, boxR, 0, 2*Math.PI);
+      ctx.strokeStyle = 'rgba(230,224,212,0.35)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      ctx.fillStyle = 'rgba(230,224,212,0.6)';
+      ctx.textAlign = 'left';
+      ctx.fillText('System view (not to scale for r_H)', w * 0.03, hTop - 10);
+    }
+
+    function drawZoom(w, hTop, hZoom) {
+      const cy = hTop + hZoom / 2 + 6;
+      const cx = w / 2;
+      const rH_AU = hillRadius();
+      const panelHalf = Math.min(w, hZoom) * 0.48; // hard boundary the circle may never exceed
+
+      // Calibrate the fixed scale once, using the default state's Hill radius,
+      // so subsequent frames reflect real change relative to that baseline.
+      if (pxPerAU_zoom === null) {
+        const refRH = 1.5 * Math.cbrt((1.0 * EARTH_TO_SOLAR) / (3 * 1.0)); // a=1.5, m=1 M⊕, M=1 M☉
+        pxPerAU_zoom = (panelHalf * REF_ZOOM_PANEL_FRACTION) / refRH;
+      }
+
+      const zoomRadiusPx = Math.min(Math.max(rH_AU * pxPerAU_zoom, 6), panelHalf);
+
+      // background separator
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+      ctx.beginPath(); ctx.moveTo(0, hTop); ctx.lineTo(w, hTop); ctx.stroke();
+
+      // subtle grid
+      ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+      ctx.lineWidth = 1;
+      const step = pxPerAU_zoom * (rH_AU / 4);
+      if (isFinite(step) && step > 2) {
+        for (let x = cx % step; x < w; x += step) { ctx.beginPath(); ctx.moveTo(x, hTop); ctx.lineTo(x, hTop + hZoom); ctx.stroke(); }
+      }
+
+      // Hill sphere dashed boundary
+      ctx.beginPath();
+      ctx.arc(cx, cy, zoomRadiusPx, 0, 2*Math.PI);
+      ctx.strokeStyle = 'rgba(78,205,196,0.6)';
+      ctx.setLineDash([5,5]); ctx.lineWidth = 1.5;
+      ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = 'rgba(78,205,196,0.08)';
+      ctx.fill();
+
+      // orbiting body at center
+      const planetR = Math.max(6, Math.min(w, hZoom) * 0.02) * Math.cbrt(Math.max(state.mEarth, 0.3)) * 0.5 + 5;
+      const pg = ctx.createRadialGradient(cx, cy, 0, cx, cy, planetR * 3);
+      pg.addColorStop(0, 'rgba(91,141,239,0.5)');
+      pg.addColorStop(1, 'rgba(91,141,239,0)');
+      ctx.beginPath(); ctx.arc(cx, cy, planetR * 3, 0, 2*Math.PI);
+      ctx.fillStyle = pg; ctx.fill();
+      ctx.beginPath(); ctx.arc(cx, cy, planetR, 0, 2*Math.PI);
+      ctx.fillStyle = '#5B8DEF'; ctx.fill();
+
+      // test moon, bound orbit at 45% of r_H — illustrates "stably orbits within the Hill sphere"
+      const moonOrbitR = zoomRadiusPx * 0.45;
+      const mx = cx + moonOrbitR * Math.cos(state.moonAngle);
+      const my = cy + moonOrbitR * Math.sin(state.moonAngle) * 0.9; // slight ellipse for visual interest
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, moonOrbitR, moonOrbitR * 0.9, 0, 0, 2*Math.PI);
+      ctx.strokeStyle = 'rgba(230,224,212,0.2)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.beginPath(); ctx.arc(mx, my, Math.max(3, planetR * 0.3), 0, 2*Math.PI);
+      ctx.fillStyle = '#E6E0D4'; ctx.fill();
+
+      // radius label
+      ctx.fillStyle = 'rgba(78,205,196,0.9)';
+      ctx.font = `${Math.max(10, w * 0.026)}px 'DM Mono', monospace`;
+      ctx.textAlign = 'left';
+      ctx.fillText(`r_H = ${rH_AU.toExponential(3)} AU`, w * 0.03, hTop + 22);
+
+      ctx.textAlign = 'right';
+      ctx.fillStyle = 'rgba(230,224,212,0.5)';
+      ctx.fillText('Zoomed on orbiting body', w * 0.97, hTop + 22);
+    }
+
+    function updateReadout() {
+      const rH = hillRadius();
+      document.getElementById('rH').textContent  = rH.toExponential(4) + ' AU';
+      document.getElementById('rPct').textContent = (100 * rH / state.a).toExponential(3) + ' %';
+      document.getElementById('ra').textContent  = state.a.toFixed(3) + ' AU';
+      document.getElementById('rM').textContent  = state.M.toFixed(3) + ' M☉';
+      document.getElementById('rm').textContent  = state.mEarth.toFixed(3) + ' M⊕';
+    }
+
+    // ── Animation loop (slow moon orbit only — the equation itself has no time dependence) ──
+    let last = null;
+    function frame(ts) {
+      _simRaf = requestAnimationFrame(frame);
+      const dt = last ? Math.min((ts - last) / 1000, 0.05) : 0;
+      last = ts;
+      state.moonAngle = (state.moonAngle + dt * 0.9) % (2 * Math.PI);
+
+      const w = W(), h = H();
+      const hTop = topH(h);
+      const hZoom = h - hTop;
+
+      ctx.clearRect(0, 0, w, h);
+      drawOverview(w, hTop);
+      drawZoom(w, hTop, hZoom);
+      updateReadout();
+    }
+    _simRaf = requestAnimationFrame(frame);
+  }
+};
+
+
+
+
+// ─── MATH RENDERING ──────────────────────────────────────────────────────────
+function renderMath() {
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });
+  }
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+function init() {
+  renderDict(DICT);
+  setFcFilter('', document.querySelector('.fc-filter button'));
+  renderMath();
+}
+
+if (window.katex && window.renderMathInElement) {
+  init();
+} else {
+  window.addEventListener('load', init);
+}
+</script>
+</body>
+</html>
